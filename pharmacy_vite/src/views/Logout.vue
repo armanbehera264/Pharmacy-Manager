@@ -2,25 +2,35 @@
     import axios from 'axios';
     import { onMounted } from 'vue';
     import { useStore } from 'vuex';
+    import router from '../router'; 
+    import { ref } from 'vue';
+
+    const leftWidth = ref('48%');
 
     onMounted (() => {
         const store = useStore()
         
         if (store.getters.isRegistered === true){ 
             const usertype = store.getters.getUserDetails['usertype']
-            console.log("usertype: "+usertype)
             const url = '/' + usertype + '/logout/'
 
-            console.log("URL: "+url)
             axios.post(url, {'logout': true})
             .then( (response) => {
-                console.log(response)
                 store.dispatch('logout')
-            })   
+            })
+            .catch( (error) => {
+                console.log(error);
+            })
         }
     })
 </script>
 
 <template>
-    <h1>Logout successful!</h1>
+    <div class="centered">
+        <h1>Logout successful!</h1>
+    </div>
+
+    <div class="centered">
+        <Button label="small" class="routerlink" @click="$router.push('/')">Home Page</Button>
+    </div>
 </template>

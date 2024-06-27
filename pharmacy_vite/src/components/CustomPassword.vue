@@ -16,12 +16,6 @@
     </Password>
 </template>
 
-<script>
-export default {
-  name: 'CustomPassword',
-  props: {
-    msg: String,
-    model: String
-  }
-}
+<script setup>
+    defineProps(['msg', 'model'])
 </script>

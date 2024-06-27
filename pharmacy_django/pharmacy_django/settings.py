@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'administrator',
     'doctor',
     'frontdesk',
+    'pharmacy',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -137,3 +138,4 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',
     'http://localhost:5173'
 )
+CORS_ALLOW_CREDNTIALS = True

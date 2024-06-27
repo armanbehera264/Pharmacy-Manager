@@ -26,10 +26,7 @@ class Medicine(models.Model):
     name = models.CharField(max_length=128, blank=False)
     ingredient = models.ForeignKey(Ingredients, on_delete=models.PROTECT, related_name="medicines")
     description = models.TextField(blank=True)
-    age = models.IntegerField(blank=True, validators = [MinValueValidator(0), MaxValueValidator(150)])
-    dosage = models.TextField(blank=True)
-    quantity = models.IntegerField(blank=True, validators=[MinValueValidator(0)])
-    lastUpdated = models.DateTimeField(auto_now=True, blank=True, verbose_name='Last Updated')
+    quantityAvailable = models.IntegerField(blank=True, validators=[MinValueValidator(0)])
     
     def __str__(self):
         return f"{self.name}: {self.description}"

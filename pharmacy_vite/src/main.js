@@ -8,18 +8,21 @@ import Aura from '@primevue/themes/aura'
 
 import axios from 'axios';
 
-// Importing all components
+// Importing PrimeVue components
 import InputText from 'primevue/inputtext';
 import DatePicker from 'primevue/datepicker';
 import Button from 'primevue/button';
 import FloatLabel from 'primevue/floatlabel';
 import Password from 'primevue/password';
 import InputNumber from 'primevue/inputnumber';
-import Dropdown from 'primevue/dropdown';
+import Select from 'primevue/select';
 import Divider from 'primevue/divider';
 import Menubar from 'primevue/menubar';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
+
+// Importing Custom components
+import CustomPassword from './components/CustomPassword.vue';
 
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
@@ -45,9 +48,11 @@ app.component('FloatLabel', FloatLabel);
 app.component('Divider', Divider);
 app.component('Password', Password);
 app.component('InputNumber', InputNumber);
-app.component('Dropdown', Dropdown);
+app.component('Select', Select);
 app.component('Menubar', Menubar);
 app.component('Toast', Toast);
+
+app.component('CustomPassword', CustomPassword);
 
 app.use(store);
 app.use(router);

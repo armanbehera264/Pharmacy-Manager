@@ -1,11 +1,10 @@
 <script setup>
     import router from '../../router';
     import { watch } from 'vue';
-    import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+    import { ref, computed, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue';
     import { useStore } from 'vuex';
-
+    
     const store = useStore();
-
 
     const items = ref([
         {
@@ -46,11 +45,11 @@
 
     const updateState = () => {
         store.dispatch('updateState');
+        const instance = getCurrentInstance();
+        instance.proxy.$forceUpdate();
     }
 
     const toRender = (state) => {
-        console.log(state);
-        console.log(loggedIn.value);
 
         if (state === 'loggedout' && !loggedIn.value){
             return true
@@ -74,17 +73,6 @@
     onBeforeUnmount(() => {
         window.removeEventListener('storage', updateState);
     });
-
-    const updateItems = () => {
-        items.value = items.value.map(item => ({
-            ...item,
-            visible: toRender(item.state)
-        }));
-    };
-
-    watch(() => store.state.isRegistered, () => {
-        updateItems();
-    })
 </script>
 
 <template>
@@ -94,14 +82,13 @@
                 <image href="../../assets/Pharmacy.png" x="2" y="2" height="36" width="36"/>
             </svg>
         </template>
-        <template #item="{ item, props, hasSubmenu }">
+        <template #item="{ item, props }">
             <a v-if="toRender(item.state)" :target="item.target" v-bind="props.action">
                 <span :class="item.icon" />
                 <span class="ml-2">{{ item.label }}</span>
-                <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
             </a>
         </template>
     </Menubar>
 
-    <router-view />
+    <router-view/>
 </template>

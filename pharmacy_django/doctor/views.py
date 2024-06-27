@@ -81,6 +81,10 @@ class Logout(APIView):
     
     def post(self, request, format=None):
 
+        print('\nEnteredasdas')
+        if request.user.is_authenticated:
+            print('\nEntered')
+            print(f'\n\n{request.user}\n{request.user.is_authenticated}\n\n')
         
         if request.user is not AnonymousUser:
             logout(request)

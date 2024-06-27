@@ -1,10 +1,9 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, onMounted, onBeforeUnmount, defineEmits } from 'vue';
     import '../../styles/styles.css';
-    import CustomPassword from '../../components/CustomPassword.vue';
     import axios from 'axios';
     import { useStore } from 'vuex';
-    import {useToast} from 'primevue/usetoast';
+    import { useToast } from 'primevue/usetoast';
     
     const first_name = ref('');
     const last_name = ref('');
@@ -15,30 +14,73 @@
     const store = useStore();
     const toast = useToast();
 
+    const visibility = ref(true);
+
+    const updateVisibility = () => {
+        if (window.innerWidth < 800) {
+            visibility.value = false;
+        }
+        if (window.innerWidth >= 800) {
+            visibility.value = true;
+        }
+    }   
+
+    onMounted(() => {
+        window.addEventListener('resize', updateVisibility);
+        updateVisibility();
+    });
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('resize', updateVisibility);
+    });
+
     const warn = (summary, detailed) => {
         toast.add({ severity: 'warn', summary: summary, detail: detailed, life: 5000 });
     }
 
     const submit = () => {
 
-        const data = {
-            first_name: first_name.value,
-            last_name: last_name.value,
-            password: password.value,
-            registration: registration.value
+        let data = {}
+        try {
+            data = {
+                first_name: first_name.value,
+                last_name: last_name.value,
+                password: password.value,
+                registration: registration.value
+            }
         }
+        catch (err) {
+            warn("Required fields are not filled!", "Please fill in all the required fields with appropriate values.");
+            return;
+        }
+        
 
-        let post = true;
+        let filled = true;
 
         console.log(data);
 
-        if (password.value != confirmPassword.value){
-            post = false;
+        if (data.password !== confirmPassword.value){
             warn("Passwords do not match!", "Password and confirmation password do not match. Ensure that they are the same.")
+            return;
         }
 
-        console.log("post:"+post)
-        if (post) {
+        for (const key in data) {
+            if (key !== 'secondary_phone_number' && key !== 'experience') {
+                const value = data[key];
+                if (typeof value === 'string' && value.trim() === '') {
+                    filled = false;
+                    break; // Exit the loop early if an empty field is found
+                } else if (typeof value === 'number' && value === 0) {
+                    filled = false;
+                    break; // Exit the loop early if a zero value is found
+                }
+            }
+        }
+
+        if (!filled){
+            warn("Required fields are not filled!", "Please fill in all the required fields with appropriate values.");
+        }
+        else {
             axios.post("/doctor/login/", {
                 data
             })
@@ -53,7 +95,7 @@
                 console.log(store.getters.getUserDetails);  
             })
             .catch( (error) => {
-                // If an error is raised not working now
+                // If an error is raised, not working now
                 warn("Unauthorized credentials!", "Invalid username/password or unauthorized by the admin. Contact admin for further details.");
             })
         }
@@ -70,25 +112,33 @@
     <div class="top-container">
         <div class="container">
             <div class="sub-container">
-                <InputText class="elements" id="first-name" placeholder="First Name" v-model="first_name"/>
-                <InputText class="elements" id="last-name" placeholder="Last Name" v-model="last_name"/>
+                <InputText class="elements" id="first-name" placeholder="First Name" v-model.trim="first_name"/>
+                <InputText class="elements" id="last-name" placeholder="Last Name" v-model.trim="last_name"/>
             </div>
 
             <div class="sub-container">
-                <CustomPassword class="elements" placeholder="Password" v-model="password"/>
+                <CustomPassword class="elements" placeholder="Password" v-model.trim="password"/>
             </div>
             
             <div class="sub-container">
-                <CustomPassword class="elements" placeholder="Confirm Password" v-model="confirmPassword"/>
+                <CustomPassword class="elements" placeholder="Confirm Password" v-model.trim="confirmPassword"/>
             </div>
 
             <div class="sub-container">
-                <InputText class="elements" id="registration" placeholder="Doctor Registration Number" v-model="registration"/>
+                <InputText class="elements" id="registration" placeholder="Doctor Registration Number" v-model.trim="registration"/>
             </div>
 
             <Button label="Submit" @click.prevent="submit"/>
             <br>
             Need to make a new account?<router-link class="links" :to="{ name: 'DoctorSignin'}">Sign In</router-link>
+        </div>
+
+        <div class="vertical-divide" v-show="visibility"></div>
+
+        <div class="container" v-show="visibility">
+            <div class="sub-container">
+                <span class="quote">"Medicine is not only a science; it is also an art. It does not consist of compounding pills and plasters; it deals with the very processes of life, which must be understood before they may be guided." - Paracelsus</span>
+            </div>
         </div>
     </div>
 </template>
