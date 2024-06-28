@@ -7,7 +7,7 @@ from administrator.models import SpecializationAvailable
 
 class DoctorManager(BaseUserManager):
     
-    def create_user(self, first_name: str, last_name: str, email: str, password: str, age: int, gender: str, dob: models.DateField, primary_phone_number: str, secondary_phone_number: str, consultation_fee: int, experience: int, registration_number: str, is_verified=False, is_staff=True, is_superuser=False) -> "User":
+    def create_user(self, first_name: str, last_name: str, email: str, password: str, age: int, gender: str, dob: models.DateField, primary_phone_number: str, secondary_phone_number: str, consultation_fee: int, experience: int, registration_number: str, is_verified: bool, is_superuser: bool) -> "User":
         if not first_name or not last_name or not email or not age or not gender or not primary_phone_number or not consultation_fee or not registration_number:
             raise ValueError("User must provide proper credentials for creating user.")
         
@@ -26,8 +26,8 @@ class DoctorManager(BaseUserManager):
         user.consultation_fee = consultation_fee
         user.experience = experience
         user.registration_number = registration_number
-        user.is_verified = is_verified
-        user.is_staff = is_staff
+        user.is_verified = False
+        user.is_staff = True
         user.is_active = True
         user.is_superuser = is_superuser
         user.set_password(password)
@@ -50,7 +50,6 @@ class DoctorManager(BaseUserManager):
             experience=experience,
             registration_number=registration_number,
             is_verified=True,
-            is_staff=True,
             is_superuser=True
         )
         user.save()
