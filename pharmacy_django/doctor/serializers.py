@@ -1,4 +1,4 @@
-from rest_framework import serializers
+'''from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
 from .models import Doctor
@@ -7,9 +7,9 @@ from .models import Doctor
 
 class SigninSerializer(serializers.ModelSerializer):
     
-    '''
+    
         Serializer for doctor sign in
-    '''
+    
     
     # Meta class helps in declaring the model to which the serializer is connected to and the fields to deserialize
     class Meta:
@@ -24,18 +24,18 @@ class SigninSerializer(serializers.ModelSerializer):
         return value
     
     def create(self, validated_data):
-        '''
+        
             Create and return a new Doctor instance
-        '''
+        
         # Fields to add in the frontend: specialization
         validated_data['password'] = make_password(validated_data.get('password'))
         return Doctor.objects.create(**validated_data)
     
     
     def update(self, instance, validated_data):
-        '''
+        
             Updates the instance
-        '''
+        
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.primary_phone_number = validated_data.get('primary_phone_number', instance.primary_phone_number)
@@ -52,4 +52,4 @@ class SigninSerializer(serializers.ModelSerializer):
         instance.is_verified = validated_data.get('is_verified', instance.is_verified)
         
         instance.save()
-        return instance
+        return instance ''' 

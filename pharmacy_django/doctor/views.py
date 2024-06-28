@@ -1,4 +1,4 @@
-from django.contrib.auth import login, logout
+'''from django.contrib.auth import login, logout
 from django.contrib.auth.models import AnonymousUser
 # from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,15 +12,15 @@ from .serializers import SigninSerializer
 from .models import Doctor
 
 class SignIn(APIView):
-    '''
+    ''
         API view for doctor signin
-    '''
+    ''
     permission_classes = [AllowAny]  
     def post(self, request, format=None):
-        '''
+        ''
         Only post methods are allowed for this endpoint.
         The data posted is stored in Doctor model.
-        '''
+        ''
         
         request.data['data']['dob'] = request.data['data']['dob'][:10]
         serializer = SigninSerializer(data=request.data['data'])
@@ -34,17 +34,17 @@ class SignIn(APIView):
         
 
 class LogIn(APIView):
-    '''
+    ''
     API view for doctor log in
-    '''
+    ''
     
     permission_classes = [AllowAny]
     
     def post(self, request, format=None):
-        '''
+        ''
         Only post methods are allowed for this endpoint.
         The data posted is checked against Doctor model and is_verified is updated.
-        '''
+        ''
         print(request.data['data'])
         data = request.data.get("data", {})
         first_name = data.get("first_name")
@@ -74,9 +74,9 @@ class LogIn(APIView):
             return Response("Incorrect username, password or unverified account.", status=status.HTTP_401_UNAUTHORIZED)
 
 class Logout(APIView):
-    '''
+    ''
     API view for doctor logout
-    '''
+    ''
     permission_classes = [AllowAny]
     
     def post(self, request, format=None):
@@ -90,4 +90,4 @@ class Logout(APIView):
             logout(request)
             return Response("Successfully logged out user.", status=status.HTTP_202_ACCEPTED)
         else:
-            return Response("Anonymous user. Cannot log out.", status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response("Anonymous user. Cannot log out.", status=status.HTTP_406_NOT_ACCEPTABLE) '''

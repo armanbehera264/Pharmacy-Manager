@@ -130,8 +130,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTH_USER_MODEL = 'doctor.Patient'
-AUTH_USER_MODEL = 'doctor.Doctor'
+AUTH_USER_MODEL = 'administrator.User'
 
 
 CORS_ORIGIN_WHITELIST = (
