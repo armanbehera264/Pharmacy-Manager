@@ -6,8 +6,14 @@ from django.contrib.auth.models import BaseUserManager
 from administrator.models import SpecializationAvailable
 
 class DoctorManager(BaseUserManager):
-    
+    '''def get_queryset(self):
+        return super().get_queryset().filter(is_verified=True)  # Only return verified doctors '''
+
     def create_user(self, first_name: str, last_name: str, email: str, password: str, age: int, gender: str, dob: models.DateField, primary_phone_number: str, secondary_phone_number: str, consultation_fee: int, experience: int, registration_number: str, is_verified: bool, is_superuser: bool) -> "User":
+        '''
+            Create a normal doctor user
+        '''
+        
         if not first_name or not last_name or not email or not age or not gender or not primary_phone_number or not consultation_fee or not registration_number:
             raise ValueError("User must provide proper credentials for creating user.")
         

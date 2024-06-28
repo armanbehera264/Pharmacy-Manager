@@ -14,7 +14,7 @@ class SigninSerializer(serializers.ModelSerializer):
     # Meta class helps in declaring the model to which the serializer is connected to and the fields to deserialize
     class Meta:
         model = Doctor
-        fields = ['first_name', 'last_name', 'primary_phone_number', 'secondary_phone_number', 'email', 'password', 'age', 'gender', 'dob', 'consultation_fee', 'registration_number', 'experience']
+        fields = ['username', 'first_name', 'last_name', 'primary_phone_number', 'secondary_phone_number', 'email', 'password', 'age', 'gender', 'dob', 'consultation_fee', 'registration_number', 'experience']
     
     def validate_gender(self, value):
         valid_genders = ['Male', 'Female', 'Other']
