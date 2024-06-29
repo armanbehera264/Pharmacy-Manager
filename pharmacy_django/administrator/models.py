@@ -3,8 +3,14 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import BaseUserManager
 class UserManager(BaseUserManager):
+    '''
+        Manager for base user
+    '''
     
-    def create_user(self, username: str, age: int, gender: str, primary_phone_number: str,  role: str, is_verified: bool, occupation: str, is_staff: bool, is_active: bool, is_superuser: bool, email: models.EmailField, password: str, first_name: str, last_name: str, secondary_phone_number: str = ''):
+    def create_user(self, username: str, age: int, gender: str, primary_phone_number: str,  role: str, is_verified: bool, occupation: str, first_name: str, last_name: str, email: models.EmailField = '', password: str = '', secondary_phone_number: str = '', is_staff: bool = False, is_active: bool = True, is_superuser: bool = False):
+        '''
+            Create user method for the mananger
+        '''
         
         if not username:
             raise ValueError("Username of the user must be provided.")
@@ -20,6 +26,10 @@ class UserManager(BaseUserManager):
             raise ValueError("It must be provided if the user is verified or not.")
         if not occupation:
             raise ValueError("Occupation of the user must be provided.")
+        if not first_name:
+            raise ValueError("First name of the user must be provided.")
+        if not last_name:
+            raise ValueError("Last name of the user must be provided.")
         
         if gender not in ['Male', 'Female', 'Other']:
             raise ValueError('The valid values for gender can only be \'Male\', \'Female\' or \'Other\'')
@@ -45,43 +55,47 @@ class UserManager(BaseUserManager):
         user.is_superuser = is_superuser
         user.set_password(password)
         user.save()
+        
+        return user
 class User(AbstractUser):
     
     '''
-        Stores the details of the base user model used ofr authentication. Serves as a template for Patient, Doctor and Employees.
+        Stores the details of the base user model used for authentication. Serves as a template for Patient, Doctor and Employees.
         
         Implicit fields created from AbstractUser: username, password, email, first_name, last_name, is_active, is_staff,
             is_superuser, last_login and date_joined
     '''
-    username = models.CharField(max_length=100, unique=True)
-    age = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(150)])
+    username = models.CharField(max_length=100, unique=True, blank=False)
+    email = models.EmailField(max_length=150, blank=True)
+    first_name = models.CharField(max_length=50, blank=False)
+    last_name = models.CharField(max_length=50, blank=False)
+    age = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(150)], blank=False)
     
-    genderChoices = {
-        'M': 'Male',
-        'F': 'Female',
-        'O': 'Other'
-    }
-    gender = models.CharField(choices=genderChoices, max_length=6)
+    genderChoices = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other')
+    )
+    gender = models.CharField(choices=genderChoices, max_length=6, blank=False)
     
-    primary_phone_number = models.CharField(max_length=15)
-    secondary_phone_number = models.CharField(max_length=15)
+    primary_phone_number = models.CharField(max_length=15, blank=False)
+    secondary_phone_number = models.CharField(max_length=15, blank=True)
     
-    roleChoices = {
-        'Admin': 'Admin',
-        'Doctor': 'Doctor',
-        'Employee': 'Employee',
-        'Patient': 'Patient'
-    } 
-    role = models.CharField(choices=roleChoices, max_length=8)
+    roleChoices = (
+        ('Admin', 'Admin'),
+        ('Doctor', 'Doctor'),
+        ('Employee', 'Employee'),
+        ('Patient', 'Patient')
+    )
+    role = models.CharField(choices=roleChoices, max_length=8, blank=False)
     
-    is_verified = models.BooleanField(default=False)
-    occupation = models.CharField(max_length=50)
+    is_verified = models.BooleanField(default=False, blank=False)
+    occupation = models.CharField(max_length=50, blank=False)
     
     objects = UserManager()
     
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['age', 'gender', 'primary_phone_number', 'role', 'is_verified', 'occupation', 'email', 'password', 'first_name', 'last_name']
-    
+        
     def __str__(self):
         return f"Name: {self.username}"
     
@@ -96,16 +110,3 @@ class SpecializationAvailable(models.Model):
 
     def __str__(self):
         return f"{self.specialization}"
-    
-
-class DoctorUser(models.Model):
-    # specialization = models.ManyToManyField(SpecializationAvailable, blank=True, on_delete=models.PROTECT, related_name="doctors")
-    user = models.OneToOneField(User, verbose_name=("User"), on_delete=models.RESTRICT)
-    consultation_fee = models.IntegerField(validators=[MinValueValidator(0)], blank=False, default=None)
-    experience = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(150)], blank=True, default=None)
-    registration_number = models.CharField(unique=True, blank=False, default=None, max_length=50)
-    # availability = // To think of a way to represent availability
-
-    def __str__(self):
-        # If the below line shows error on self.user.username, dont worry it works
-        return f"Username: {self.user.username}\nRegistration Number: {self.registration_number}"
