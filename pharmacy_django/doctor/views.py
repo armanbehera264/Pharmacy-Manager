@@ -3,6 +3,7 @@ from rest_framework import views, response, status, permissions, exceptions
 from administrator.models import User
 from .models import DoctorUser
 from .serializers import DoctorSerializer
+from . import services
 
 class SignIn(views.APIView):
     '''
@@ -17,7 +18,8 @@ class SignIn(views.APIView):
         
         serializer = DoctorSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+            
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             print(request.data)
@@ -47,5 +49,12 @@ class LogIn(views.APIView):
         if not user.check_password(raw_password=password):
             raise exceptions.AuthenticationFailed('Invalid password.')
         
+        token = services.create_token(user_id=user.id)
+        
+        resp = response.Response()
+        
+        resp.set_cookie(key="jwt", value=token, httponly=True)
+        
+        return resp
         
         
