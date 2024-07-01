@@ -18,6 +18,10 @@ class SignIn(views.APIView):
         '''
         
         serializer = DoctorSerializer(data=request.data)
+        
+        print
+        print(request.data)
+        print()
         if serializer.is_valid():
             user = serializer.save()
             

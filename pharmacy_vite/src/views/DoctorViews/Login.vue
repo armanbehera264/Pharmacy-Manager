@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, onMounted, onBeforeUnmount, defineEmits } from 'vue';
+    import { ref, onMounted, onBeforeUnmount } from 'vue';
     import '../../styles/styles.css';
     import axios from 'axios';
     import { useStore } from 'vuex';
@@ -9,7 +9,7 @@
     const last_name = ref('');
     const password = ref('');
     const confirmPassword = ref('');
-    const registration = ref('');
+    const registration_number = ref('');
 
     const store = useStore();
     const toast = useToast();
@@ -46,7 +46,7 @@
                 first_name: first_name.value,
                 last_name: last_name.value,
                 password: password.value,
-                registration: registration.value
+                registration_number: registration_number.value
             }
         }
         catch (err) {
@@ -56,8 +56,6 @@
         
 
         let filled = true;
-
-        console.log(data);
 
         if (data.password !== confirmPassword.value){
             warn("Passwords do not match!", "Password and confirmation password do not match. Ensure that they are the same.")
@@ -82,17 +80,16 @@
         }
         else {
             axios.post("/doctor/login/", {
-                data
+                
+                "username": `${data.first_name}${data.last_name}${data.registration_number}`,
+                "password": data.password
             })
             .then( (response) => {
                 
-                console.log(response);
-                var username = data['first_name'] + data['last_name'] + data['registration'];
-                console.log("U: "+username);
+                var username = `${data.first_name}${data.last_name}${data.registration_number}`;
                 store.dispatch('setIsRegistered', true);
                 store.dispatch('setUserType', 'doctor');
                 store.dispatch('setUsername', username);
-                console.log(store.getters.getUserDetails);  
             })
             .catch( (error) => {
                 // If an error is raised, not working now
@@ -125,7 +122,7 @@
             </div>
 
             <div class="sub-container">
-                <InputText class="elements" id="registration" placeholder="Doctor Registration Number" v-model.trim="registration"/>
+                <InputText class="elements" id="registration" placeholder="Doctor Registration Number" v-model.trim="registration_number"/>
             </div>
 
             <Button label="Submit" @click.prevent="submit"/>

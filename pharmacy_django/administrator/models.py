@@ -9,7 +9,7 @@ class UserManager(BaseUserManager):
     
     def create_user(self, username: str, age: int, gender: str, primary_phone_number: str,  role: str, is_verified: bool, occupation: str, first_name: str, last_name: str, email: models.EmailField = '', password: str = '', secondary_phone_number: str = '', is_staff: bool = False, is_active: bool = True, is_superuser: bool = False):
         '''
-            Create user method for the mananger
+            Create user method for the manager
         '''
         
         if not username:
@@ -22,14 +22,18 @@ class UserManager(BaseUserManager):
             raise ValueError("Primary Phone Number of the user must be provided.")
         if not role:
             raise ValueError("Role of the user must be provided.")
-        if not is_verified:
-            raise ValueError("It must be provided if the user is verified or not.")
         if not occupation:
             raise ValueError("Occupation of the user must be provided.")
         if not first_name:
             raise ValueError("First name of the user must be provided.")
         if not last_name:
             raise ValueError("Last name of the user must be provided.")
+        
+        # As is_verified is a boolean, using the conventional method will fire if is_verified is set to False, leading to errors
+        try:
+            is_verified
+        except NameError:
+            raise ValueError("It must be provided if the user is verified or not.")
         
         if gender not in ['Male', 'Female', 'Other']:
             raise ValueError('The valid values for gender can only be \'Male\', \'Female\' or \'Other\'')
