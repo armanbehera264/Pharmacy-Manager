@@ -1,7 +1,7 @@
 from rest_framework import serializers, exceptions
 from django.contrib.auth.hashers import make_password
 
-from .models import User
+from .models import User, SpecializationAvailable
 
 class UserSerializer(serializers.ModelSerializer):
     '''
@@ -37,3 +37,12 @@ class UserSerializer(serializers.ModelSerializer):
         if value not in ['Male', 'Female', 'Other']:
             raise exceptions.ValidationError(detail="Gender of the user can only have three values: 'Male', 'Female' or 'Other'")
         return value
+    
+class SpecializationSerializer(serializers.ModelSerializer):
+    '''
+        Serializer for specialization serializer
+    '''
+    
+    class Meta:
+        model = SpecializationAvailable
+        fields = '__all__'

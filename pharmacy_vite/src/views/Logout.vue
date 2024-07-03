@@ -19,6 +19,7 @@
                 store.dispatch('logout')
             })
             .catch( (error) => {
+                store.dispatch('logout')
                 console.log(error);
             })
         }

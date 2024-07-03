@@ -10,7 +10,7 @@
         {
             label: 'Home',
             icon: 'pi pi-home',
-            state: 'always',
+            loggedIn: true,
             command: () => {
                 router.push('/doctor/')
             }
@@ -18,7 +18,7 @@
         {
             label: 'Signin',
             icon: 'pi pi-sign-in',
-            state: 'loggedout',
+            loggedIn: false,
             command: () => {
                 router.push('/doctor/signin')
             }
@@ -26,7 +26,7 @@
         {
             label: 'Login',
             icon: 'pi pi-user',
-            state: 'loggedout',
+            loggedIn: false,
             command: () => {
                 router.push('/doctor/login')
             }
@@ -34,45 +34,14 @@
         {
             label: 'Logout',
             icon: 'pi pi-sign-out',
-            state: 'loggedin',
+            loggedIn: true,
             command: () => {
                 router.push('/logout')
             }
         }
     ])
 
-    const loggedIn = computed(() => store.getters.isRegistered);
-
-    const updateState = () => {
-        store.dispatch('updateState');
-        const instance = getCurrentInstance();
-        instance.proxy.$forceUpdate();
-    }
-
-    const toRender = (state) => {
-
-        if (state === 'loggedout' && !loggedIn.value){
-            return true
-        }
-        else if (state === 'loggedin' && loggedIn.value){
-            return true
-        }
-        else if (state === 'always'){
-            return true
-        }
-        else {
-            return false
-        }
-    }
-
-    onMounted(() => {
-        updateState();
-        window.addEventListener('storage', updateState);
-    })
-
-    onBeforeUnmount(() => {
-        window.removeEventListener('storage', updateState);
-    });
+    const loggedIn = computed(() => store.state.isRegistered);
 </script>
 
 <template>
@@ -83,12 +52,12 @@
             </svg>
         </template>
         <template #item="{ item, props }">
-            <a v-if="toRender(item.state)" :target="item.target" v-bind="props.action">
+            <a v-if="item.loggedIn == loggedIn" :target="item.target" v-bind="props.action">
                 <span :class="item.icon" />
                 <span class="ml-2">{{ item.label }}</span>
             </a>
         </template>
     </Menubar>
-
+    {{ loggedIn }}
     <router-view/>
 </template>

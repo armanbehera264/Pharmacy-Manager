@@ -19,16 +19,11 @@ class SignIn(views.APIView):
         
         serializer = DoctorSerializer(data=request.data)
         
-        print
-        print(request.data)
-        print()
         if serializer.is_valid():
             user = serializer.save()
             
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            print(request.data)
-            print(serializer.errors)
             return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
@@ -60,7 +55,7 @@ class LogIn(views.APIView):
         
         resp.set_cookie(key="jwt", value=token, httponly=True)
         
-        resp.data = {"message": "Successfully logged in user."}
+        resp.data = {"jwt": token}
         
         return resp
         
