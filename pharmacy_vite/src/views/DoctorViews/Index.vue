@@ -11,6 +11,7 @@
             label: 'Home',
             icon: 'pi pi-home',
             loggedIn: true,
+            loggedOut: true,
             command: () => {
                 router.push('/doctor/')
             }
@@ -19,6 +20,7 @@
             label: 'Signin',
             icon: 'pi pi-sign-in',
             loggedIn: false,
+            loggedOut: true,
             command: () => {
                 router.push('/doctor/signin')
             }
@@ -27,6 +29,7 @@
             label: 'Login',
             icon: 'pi pi-user',
             loggedIn: false,
+            loggedOut: true,
             command: () => {
                 router.push('/doctor/login')
             }
@@ -35,6 +38,7 @@
             label: 'Logout',
             icon: 'pi pi-sign-out',
             loggedIn: true,
+            loggedOut: false,
             command: () => {
                 router.push('/logout')
             }
@@ -52,12 +56,11 @@
             </svg>
         </template>
         <template #item="{ item, props }">
-            <a v-if="item.loggedIn == loggedIn" :target="item.target" v-bind="props.action">
+            <a v-if="item.loggedIn == loggedIn || item.loggedOut == !loggedIn" :target="item.target" v-bind="props.action">
                 <span :class="item.icon" />
                 <span class="ml-2">{{ item.label }}</span>
             </a>
         </template>
     </Menubar>
-    {{ loggedIn }}
     <router-view/>
 </template>

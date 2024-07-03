@@ -86,6 +86,8 @@
             })
             .then( (response) => {
                 
+                console.log(response.data.jwt) // Token that has been sent from the backend.
+
                 var username = `${data.first_name}${data.last_name}${data.registration_number}`;
                 store.dispatch('setIsRegistered', true);
                 store.dispatch('setUserType', 'doctor');
