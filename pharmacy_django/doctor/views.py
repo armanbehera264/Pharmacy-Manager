@@ -53,7 +53,7 @@ class LogIn(views.APIView):
         
         resp = response.Response()
         
-        resp.set_cookie(key="jwt", value=token, httponly=True)
+        # resp.set_cookie(key="jwt", value=token, httponly=True)
         
         resp.data = {"jwt": token}
         
@@ -97,7 +97,7 @@ class Logout(views.APIView):
     
     def get(self, request):
         resp = response.Response()
-        resp.delete_cookie("jwt")
+        # resp.delete_cookie("jwt")
         
         resp.data = {"message": "Successfully logged out user."}
         

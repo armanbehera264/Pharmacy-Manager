@@ -4,6 +4,7 @@
     import axios from 'axios';
     import { useStore } from 'vuex';
     import { useToast } from 'primevue/usetoast';
+    import { setCookie } from '../../services';
     
     const first_name = ref('');
     const last_name = ref('');
@@ -86,7 +87,7 @@
             })
             .then( (response) => {
                 
-                console.log(response.data.jwt) // Token that has been sent from the backend.
+                setCookie('jwt', response.data.jwt)
 
                 var username = `${data.first_name}${data.last_name}${data.registration_number}`;
                 store.dispatch('setIsRegistered', true);
@@ -95,6 +96,7 @@
             })
             .catch( (error) => {
                 // If an error is raised, not working now
+                console.log(error)
                 warn("Unauthorized credentials!", "Invalid username/password or unauthorized by the admin. Contact admin for further details.");
             })
         }

@@ -28,6 +28,7 @@ import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000'
+axios.defaults.withCredentials = true;
 
 const app = createApp(App);
 

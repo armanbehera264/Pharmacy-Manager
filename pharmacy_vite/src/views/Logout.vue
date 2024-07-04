@@ -14,12 +14,13 @@
             const usertype = store.getters.getUserDetails['usertype']
             const url = '/' + usertype + '/logout/'
 
-            axios.post(url, {'logout': true})
+            axios.post(url)
             .then( (response) => {
                 store.dispatch('logout')
+                // document.cookie = 'jwt=; max-age=0; path=/'
             })
             .catch( (error) => {
-                store.dispatch('logout')
+                // store.dispatch('logout')
                 console.log(error);
             })
         }
