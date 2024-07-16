@@ -5,6 +5,7 @@
     import { useStore } from 'vuex';
     import { useToast } from 'primevue/usetoast';
     import { setCookie } from '../../services';
+    import router from '../../router' 
     
     const first_name = ref('');
     const last_name = ref('');
@@ -87,12 +88,13 @@
             })
             .then( (response) => {
                 
-                setCookie('jwt', response.data.jwt)
+                setCookie('jwt', response.data.jwt, 24)
 
                 var username = `${data.first_name}${data.last_name}${data.registration_number}`;
                 store.dispatch('setIsRegistered', true);
                 store.dispatch('setUserType', 'doctor');
                 store.dispatch('setUsername', username);
+                router.push('/doctor')
             })
             .catch( (error) => {
                 // If an error is raised, not working now

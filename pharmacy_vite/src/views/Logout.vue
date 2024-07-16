@@ -2,10 +2,10 @@
     import axios from 'axios';
     import { onMounted } from 'vue';
     import { useStore } from 'vuex';
-    import router from '../router'; 
     import { ref } from 'vue';
+    import { getCookieValue } from '../services'
 
-    const leftWidth = ref('48%');
+    const message = ref('');
 
     onMounted (() => {
         const store = useStore()
@@ -14,13 +14,24 @@
             const usertype = store.getters.getUserDetails['usertype']
             const url = '/' + usertype + '/logout/'
 
-            axios.post(url)
+            const cookie = getCookieValue("jwt")
+            console.log(cookie)
+
+            axios.post(url, 
+            { 
+                "logout" : true,
+                "cookie" : cookie
+            }, 
+            {
+                withCredentials: true
+            })
             .then( (response) => {
                 store.dispatch('logout')
-                // document.cookie = 'jwt=; max-age=0; path=/'
+                document.cookie = 'jwt=; max-age=0; path=/'
+                message.value = "Logout successful!"
             })
             .catch( (error) => {
-                // store.dispatch('logout')
+                message.value = "Logout unsuccessful!"
                 console.log(error);
             })
         }
@@ -29,7 +40,7 @@
 
 <template>
     <div class="centered">
-        <h1>Logout successful!</h1>
+        <h1>{{ message }}</h1>
     </div>
 
     <div class="centered">

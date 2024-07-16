@@ -13,11 +13,17 @@ class CustomUserAuthentication(authentication.BaseAuthentication):
         
         # if the token does not exist
         if not token:
+            try:
+                token = request.data["cookie"]
+            except KeyError:
+                return None
+        
+        if not token:
             return None
         
         # Tries to decode the token
         try:
-            payload = jwt.decode(token, settings.JWT_SECRET, algorithms="HS256")
+            payload = jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
         except jwt.exceptions.DecodeError as e:
             raise exceptions.AuthenticationFailed(f"Unauthorized {e}")
         

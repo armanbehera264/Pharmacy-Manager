@@ -5,12 +5,14 @@ from .models import DoctorUser
 from .serializers import DoctorSerializer
 from administrator.serializers import UserSerializer
 from administrator import services, authentication
+import jwt
+from django.conf import settings
 
 class SignIn(views.APIView):
     '''
         API view for doctor signin
     '''
-    permission_classes = [permissions.AllowAny]  
+    permission_classes = (permissions.AllowAny, )
     def post(self, request):
         '''
         Only post methods are allowed for this endpoint.
@@ -31,7 +33,7 @@ class LogIn(views.APIView):
     '''
         APIView for doctor login
     '''
-    permission_classes = [permissions.AllowAny]
+    permission_classes = (permissions.AllowAny, )
     def post(self, request):
         '''
             Only post methods are allowed for this endpoint.
@@ -60,6 +62,29 @@ class LogIn(views.APIView):
         return resp
         
 
+class res(views.APIView):
+    permission_classes  =(permissions.AllowAny, )
+    
+    def post(self, request):
+        
+        '''
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZXhwIjoxNzIxMTkzMTYwLCJpYXQiOjE3MjExMDY3MDB9.nqdfgWcXDugRfXYRX51NJ4hraGmFNL5VoB7GbaDbTvQ
+        '''
+        
+        cookie = request.data['cookie']
+        
+        try:
+            payload = jwt.decode(cookie, settings.JWT_SECRET, algorithms=["HS256"])
+        except jwt.exceptions.DecodeError as e:
+            raise exceptions.AuthenticationFailed(f"Unauthorized {e}")
+        
+        # Returns a user that is decoded from the token
+        user = User.objects.filter(id=payload["id"]).first()  
+        
+        serializer = UserSerializer(user)
+        
+        return response.Response(serializer.data)
+
 class DoctorAPI(views.APIView):
     '''
         This viewpoint can only be used if the user is authenticated.
@@ -75,7 +100,7 @@ class DoctorAPI(views.APIView):
         
         return response.Response(serializer.data)
         
-    
+
 class PatientAPI(views.APIView):
     '''
         This viewpoint can only be used if the user is authenticated and the user is a doctor.
@@ -95,7 +120,7 @@ class Logout(views.APIView):
     authentication_classes = (authentication.CustomUserAuthentication, )
     permission_classes = (permissions.IsAuthenticated, )
     
-    def get(self, request):
+    def post(self, request):
         resp = response.Response()
         # resp.delete_cookie("jwt")
         
