@@ -1,7 +1,7 @@
 <script setup>
     import router from '../../router';
     import { watch } from 'vue';
-    import { ref, computed, onMounted, onBeforeUnmount, getCurrentInstance } from 'vue';
+    import { ref, computed } from 'vue';
     import { useStore } from 'vuex';
     
     const store = useStore();
@@ -13,16 +13,7 @@
             loggedIn: true,
             loggedOut: true,
             command: () => {
-                router.push('/doctor/')
-            }
-        },
-        {
-            label: 'Signin',
-            icon: 'pi pi-sign-in',
-            loggedIn: false,
-            loggedOut: true,
-            command: () => {
-                router.push('/doctor/signin')
+                router.push('/admin/')
             }
         },
         {
@@ -31,7 +22,7 @@
             loggedIn: false,
             loggedOut: true,
             command: () => {
-                router.push('/doctor/login')
+                router.push('/admin/login')
             }
         },
         {

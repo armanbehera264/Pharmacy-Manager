@@ -65,15 +65,14 @@
         }
 
         for (const key in data) {
-            if (key !== 'secondary_phone_number' && key !== 'experience') {
-                const value = data[key];
-                if (typeof value === 'string' && value.trim() === '') {
-                    filled = false;
-                    break; // Exit the loop early if an empty field is found
-                } else if (typeof value === 'number' && value === 0) {
-                    filled = false;
-                    break; // Exit the loop early if a zero value is found
-                }
+            
+            const value = data[key];
+            if (typeof value === 'string' && value.trim() === '') {
+                filled = false;
+                break; // Exit the loop early if an empty field is found
+            } else if (typeof value === 'number' && value === 0) {
+                filled = false;
+                break; // Exit the loop early if a zero value is found
             }
         }
 
@@ -88,7 +87,7 @@
             })
             .then( (response) => {
                 
-                setCookie('jwt', response.data.jwt, 24)
+                setCookie('jwt', response.data.jwt)
 
                 var username = `${data.first_name}${data.last_name}${data.registration_number}`;
                 store.dispatch('setIsRegistered', true);

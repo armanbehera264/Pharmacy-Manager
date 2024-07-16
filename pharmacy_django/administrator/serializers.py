@@ -16,6 +16,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__' # Uses all the fields defined in the model User
         
+    # Had to override the default implementation because functionality was conflicting with password check
+    def create(self, validated_data):
+        user_data = validated_data
+        # doctor_data = validated_data.pop('user')
+        
+        user = User.objects.create_user(**user_data)
+        
+        return user
     
     def validate(self, attrs):
         
