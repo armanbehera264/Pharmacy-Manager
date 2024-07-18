@@ -11,6 +11,7 @@ import DoctorLogin from '../views/DoctorViews/Login.vue'
 import Admin from '../views/AdminViews/Index.vue'
 import AdminHomePage from '../views/AdminViews/HomePage.vue'
 import AdminLogin from '../views/AdminViews/Login.vue'
+import VerifyEmployees from '../views/AdminViews/VerifyEmployees.vue'
 
 import Employee from '../views/EmployeeViews/Index.vue'
 import EmployeeHomePage from '../views/EmployeeViews/Homepage.vue'
@@ -67,6 +68,11 @@ const routes = [
         path: 'login',
         name: 'AdminLogin',
         component: AdminLogin
+      },
+      {
+        path: 'verifyEmployees',
+        name: 'VerifyEmployees',
+        component: VerifyEmployees
       }
     ]
   },

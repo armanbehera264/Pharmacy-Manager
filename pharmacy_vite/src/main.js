@@ -20,6 +20,10 @@ import Divider from 'primevue/divider';
 import Menubar from 'primevue/menubar';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Toolbar from 'primevue/toolbar';
+import Dialog from 'primevue/dialog';
 
 // Importing Custom components
 import CustomPassword from './components/CustomPassword.vue';
@@ -52,6 +56,10 @@ app.component('InputNumber', InputNumber);
 app.component('Select', Select);
 app.component('Menubar', Menubar);
 app.component('Toast', Toast);
+app.component('DataTable', DataTable);
+app.component('Column', Column);
+app.component('Toolbar', Toolbar);
+app.component('Dialog', Dialog);
 
 app.component('CustomPassword', CustomPassword);
 

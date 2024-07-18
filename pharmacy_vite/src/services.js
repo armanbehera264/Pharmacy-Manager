@@ -1,6 +1,6 @@
 export function setCookie(name, value) {
 
-    document.cookie = `${name}=${value}; SameSite=Lax; path`;
+    document.cookie = `${name}=${value}; SameSite=None; path=/`;
 }
 
 export function getCookieValue(cookieName) {

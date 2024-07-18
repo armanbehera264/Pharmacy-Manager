@@ -77,18 +77,19 @@
             warn("Required fields are not filled!", "Please fill in all the required fields with appropriate values.");
         }
         else {
-            axios.post("/admin/login/", {
+            axios.post("/administrator/login/", {
                 
                 "username": `${data.first_name}${data.last_name}`,
                 "password": data.password
             })
             .then( (response) => {
-                
-                setCookie('jwt', response.data.jwt)
+                // Figured out that jwt was not being sent due to SameSite being set to Lax, and should be sent to None. But now the cookie is not being stored. To fix this and check the website.
+                console.log(response.data.jwt)
+                document.cookie = `jwt=${response.data.jwt}; SameSite=None; path=/`;
 
                 var username = `${data.first_name}${data.last_name}`;
                 store.dispatch('setIsRegistered', true);
-                store.dispatch('setUserType', 'admin');
+                store.dispatch('setUserType', 'administrator');
                 store.dispatch('setUsername', username);
                 router.push('/admin')
             })
@@ -102,7 +103,6 @@
 </script>
 
 <template>
-    
     <div class="flex align-items-center justify-content-center">
         <Toast/>
         <h1>Login</h1>

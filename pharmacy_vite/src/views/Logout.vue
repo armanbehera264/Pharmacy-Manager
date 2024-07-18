@@ -33,6 +33,8 @@
             .catch( (error) => {
                 message.value = "Logout unsuccessful!"
                 console.log(error);
+                store.dispatch('logout')
+                document.cookie = 'jwt=; max-age=0; path=/'
             })
         }
     })
