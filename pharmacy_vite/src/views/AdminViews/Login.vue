@@ -81,11 +81,12 @@
                 
                 "username": `${data.first_name}${data.last_name}`,
                 "password": data.password
+            }, {
+                 withCredentials: true 
             })
             .then( (response) => {
                 // Figured out that jwt was not being sent due to SameSite being set to Lax, and should be sent to None. But now the cookie is not being stored. To fix this and check the website.
-                console.log(response.data.jwt)
-                document.cookie = `jwt=${response.data.jwt}; SameSite=None; path=/`;
+                const setCookieHeader = response.headers['set-cookie'];
 
                 var username = `${data.first_name}${data.last_name}`;
                 store.dispatch('setIsRegistered', true);

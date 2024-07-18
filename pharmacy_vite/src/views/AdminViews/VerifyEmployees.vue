@@ -4,6 +4,8 @@
     import { ref } from 'vue';
     import { useToast } from 'primevue/usetoast';
 
+    axios.defaults.withCredentials = true;
+
     const data = ref([
         {
             "id": 1,
@@ -60,7 +62,7 @@
     const toast = useToast();
     
     if (store.getters.isRegistered === true){
-        axios.get('/administrator/verifyEmployees/', { withCredentials: true })
+        axios.get('/administrator/verifyEmployees/')
         .then( (response) => {
             console.log(response)
             data = response

@@ -13,7 +13,7 @@
             loggedIn: true,
             loggedOut: true,
             command: () => {
-                router.push('/admin/')
+                router.push('/doctor/')
             }
         },
         {
@@ -22,7 +22,7 @@
             loggedIn: false,
             loggedOut: true,
             command: () => {
-                router.push('/admin/login')
+                router.push('/doctor/login')
             }
         },
         {
