@@ -3,8 +3,7 @@
     import { useStore } from 'vuex';
     import { ref } from 'vue';
     import { useToast } from 'primevue/usetoast';
-
-    axios.defaults.withCredentials = true;
+    import { setCookie, getCookieValue } from '../../services.js'
 
     const data = ref([
         {
@@ -51,21 +50,21 @@
         }
     ])
 
-    const message = ref()
+    const message = ref();
     const selected = ref();
 
     const verificationDialog = ref();
     const deletionDialog = ref();
 
-    const store = useStore()
+    const store = useStore();
     store.dispatch('updateState');
     const toast = useToast();
-    
+
     if (store.getters.isRegistered === true){
         axios.get('/administrator/verifyEmployees/')
         .then( (response) => {
             console.log(response)
-            data = response
+            data.value = response
         })
         .then( (error) => {
             console.log(error)
@@ -112,19 +111,22 @@
     <div class="centered">
         <h1>{{ message }}</h1>
     </div>
-
+    
     <div class="top-container">
+        
         <div class="container">
-
+            <h1>Verify Employees</h1>
             <div class="sub-container" style="margin-left:7rem;">
-                <DataTable :value="data" v-model:selection="selected" datakey="id" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
-                    
-                    <Column selectionMode="multiple" style="width: 3rem"></Column>
-                    <Column field="first_name" header="First Name" style="width: 20%" sortable></Column>
-                    <Column field="last_name" header="Last Name" style="width: 20%" sortable></Column>
-                    <Column field="role" header="Role" style="width: 20%" sortable></Column>
-                    <Column field="email" header="Email" style="width:50%" sortable></Column>
-                </DataTable>
+                <div class="card">
+                    <DataTable :value="data" v-model:selection="selected" datakey="id" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
+                        
+                        <Column selectionMode="multiple" style="width: 3rem"></Column>
+                        <Column field="first_name" header="First Name" style="width: 20%" sortable></Column>
+                        <Column field="last_name" header="Last Name" style="width: 20%" sortable></Column>
+                        <Column field="role" header="Role" style="width: 20%" sortable></Column>
+                        <Column field="email" header="Email" style="width:50%" sortable></Column>
+                    </DataTable>
+                </div>
             </div>
             
             <div class="sub-container"> 

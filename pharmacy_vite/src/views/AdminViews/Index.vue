@@ -5,24 +5,25 @@
     import { useStore } from 'vuex';
     
     const store = useStore();
+    const drawerVisible = ref(false);
 
     const items = ref([
         {
             label: 'Home',
             icon: 'pi pi-home',
-            loggedIn: true,
+            loggedIn: false,
             loggedOut: true,
             command: () => {
                 router.push('/admin/')
             }
         },
         {
-            label: 'Signin',
-            icon: 'pi pi-sign-in',
-            loggedIn: false,
-            loggedOut: true,
+            label: 'Menu',
+            icon: 'pi pi-bars',
+            loggedIn: true,
+            loggedOut: false,
             command: () => {
-                router.push('/admin/signin')
+                drawerVisible.value = true;
             }
         },
         {
@@ -49,6 +50,10 @@
 </script>
 
 <template>
+    <!-- To implement a side bar if logged in-->
+    <div class="card flex justify-center">
+        <CustomDrawer v-model:visible="drawerVisible" heading="Admin Page"/>
+    </div>
     <Menubar :model="items">
         <template #start>
             <svg width="50" height="40">

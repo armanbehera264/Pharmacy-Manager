@@ -10,7 +10,7 @@
         {
             label: 'Home',
             icon: 'pi pi-home',
-            loggedIn: true,
+            loggedIn: false,
             loggedOut: true,
             command: () => {
                 router.push('/doctor/')

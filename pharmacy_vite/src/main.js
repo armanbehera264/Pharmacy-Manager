@@ -24,15 +24,16 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Toolbar from 'primevue/toolbar';
 import Dialog from 'primevue/dialog';
+import Row from 'primevue/row';
+import Drawer from 'primevue/drawer';
 
 // Importing Custom components
 import CustomPassword from './components/CustomPassword.vue';
+import ExpandableDataTable from './components/ExpandableDataTable.vue';
+import CustomDrawer from './components/CustomDrawer.vue';
 
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
-
-axios.defaults.baseURL = 'http://127.0.0.1:8000';
-axios.defaults.withCredentials = true;
 
 const app = createApp(App);
 
@@ -45,7 +46,9 @@ app.use(PrimeVue, {
             cssLayer: false
          },
          ripple: true
-    }});
+    }
+});
+
 app.component('InputText', InputText);
 app.component('DatePicker', DatePicker);
 app.component('Button', Button);
@@ -60,12 +63,15 @@ app.component('DataTable', DataTable);
 app.component('Column', Column);
 app.component('Toolbar', Toolbar);
 app.component('Dialog', Dialog);
+app.component('Row', Row);
+app.component('Drawer', Drawer)
 
 app.component('CustomPassword', CustomPassword);
+app.component('ExpandableDataTable', ExpandableDataTable);
+app.component('CustomDrawer', CustomDrawer);
 
 app.use(store);
 app.use(router);
-app.use(axios)
 app.use(ToastService);
 
 app.mount('#app');

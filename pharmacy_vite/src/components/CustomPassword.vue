@@ -15,7 +15,3 @@
         </template>
     </Password>
 </template>
-
-<script setup>
-    defineProps(['msg', 'model'])
-</script>
