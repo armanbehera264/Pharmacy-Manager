@@ -5,8 +5,7 @@ import store from './store';
 
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura'
-
-import axios from 'axios';
+import './styles/tailwind.css';
 
 // Importing PrimeVue components
 import InputText from 'primevue/inputtext';

@@ -1,11 +1,11 @@
 <script setup>
-    import axios from 'axios';
+    import axios from '../../axios';
     import { useStore } from 'vuex';
     import { ref } from 'vue';
     import { useToast } from 'primevue/usetoast';
     import { setCookie, getCookieValue } from '../../services.js'
 
-    const data = ref([
+    /*const data = ref([
         {
             "id": 1,
             "last_login": null,
@@ -48,7 +48,9 @@
             "groups": [],
             "user_permissions": []
         }
-    ])
+    ])*/
+
+    const data = ref();
 
     const message = ref();
     const selected = ref();
