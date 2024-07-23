@@ -1,59 +1,25 @@
 <script setup>
-    
     import axios from 'axios';
     import { useStore } from 'vuex';
     import { ref } from 'vue';
 
-    const userData = ref([
-        {
-            statName: "Current User Count",
-            count: "50",
-            subFields: [
-                {
-                    subFieldName: "Doctor Count",
-                    value: "20"
-                },
-                {
-                    subFieldName: "Employee Count",
-                    value: "5"
-                }
-            ]
-        },
-        {
-            statName: "Unverified Users",
-            count: "3",
-            subFields: [
-                {
-                    subFieldName: "Arman Behera",
-                    value: "Doctor"
-                },
-                {
-                    subFieldName: "Jane Smith",
-                    value: "Employee"
-                },
-                {
-                    subFieldName: "John Doe",
-                    value: "Front Desk"
-                }
-            ]
-        }
-    ]);
+    const userData = ref();
+    const inventoryData = ref();
 
-    const inventoryData = ref([
-        {
-            statName: "Ondem",
-            value: "30"
-        },
-        {
-            statName: "O2",
-            value: "10"
-        }
-    ]);
+
 
     const expandedRows = ref();
 
     const store = useStore();
     store.dispatch('updateState');
+
+    axios.get('/api/v1/users/me')
+    .then( (response) => {
+        console.log(response)
+    })
+    .then( (error) => {
+        console.log(error)
+    })
     
     
 </script>

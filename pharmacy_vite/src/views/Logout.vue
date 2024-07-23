@@ -1,5 +1,5 @@
 <script setup>
-    import axios from '../axios';
+    import axios from 'axios';
     import { onMounted } from 'vue';
     import { useStore } from 'vuex';
     import { ref } from 'vue';
@@ -27,14 +27,12 @@
             })
             .then( (response) => {
                 store.dispatch('logout')
-                document.cookie = 'jwt=; max-age=0; path=/'
                 message.value = "Logout successful!"
             })
             .catch( (error) => {
                 message.value = "Logout unsuccessful!"
                 console.log(error);
                 store.dispatch('logout')
-                document.cookie = 'jwt=; max-age=0; path=/'
             })
         }
     })

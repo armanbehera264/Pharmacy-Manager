@@ -44,9 +44,17 @@
                 router.push('/logout')
             }
         }
-    ])
+    ]);
 
     const loggedIn = computed(() => store.state.isRegistered);
+
+    watch(loggedIn, (newVal, oldVal) => {
+        
+        if (newVal === true){
+            console.log(`newVal: ${newVal}`)
+        }
+            
+    });
 </script>
 
 <template>

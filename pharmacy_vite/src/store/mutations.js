@@ -16,5 +16,9 @@ export default {
         state.usertype = '';
         state.isRegistered = false;
         state.username = '';
+    },
+
+    setRefreshToken(state, refresh) {
+        state.refreshToken = refresh
     }
 }

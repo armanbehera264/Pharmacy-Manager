@@ -86,8 +86,8 @@
                 "password": data.password
             })
             .then( (response) => {
-                
-                setCookie('jwt', response.data.jwt)
+
+                // To set cookie
 
                 var username = `${data.first_name}${data.last_name}${data.registration_number}`;
                 store.dispatch('setIsRegistered', true);
@@ -96,7 +96,6 @@
                 router.push('/doctor')
             })
             .catch( (error) => {
-                // If an error is raised, not working now
                 console.log(error)
                 warn("Unauthorized credentials!", "Invalid username/password or unauthorized by the admin. Contact admin for further details.");
             })

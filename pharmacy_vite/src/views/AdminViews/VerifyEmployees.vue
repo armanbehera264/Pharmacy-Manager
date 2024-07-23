@@ -1,5 +1,5 @@
 <script setup>
-    import axios from '../../axios';
+    import axios from 'axios';
     import { useStore } from 'vuex';
     import { ref } from 'vue';
     import { useToast } from 'primevue/usetoast';
@@ -63,10 +63,10 @@
     const toast = useToast();
 
     if (store.getters.isRegistered === true){
-        axios.get('/administrator/verifyEmployees/')
+        axios.get('/api/token/verify/')
         .then( (response) => {
             console.log(response)
-            data.value = response
+            // data.value = response
         })
         .then( (error) => {
             console.log(error)

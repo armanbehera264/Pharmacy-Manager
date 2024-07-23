@@ -7,7 +7,8 @@ import mutations from './mutations';
 const state = {
   isRegistered: false,
   username: '',
-  usertype: ''
+  usertype: '',
+  refreshToken: ''
 }
 
 export default createStore({

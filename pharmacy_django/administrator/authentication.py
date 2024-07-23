@@ -5,7 +5,6 @@ import jwt
 from .models import User
 
 class CustomUserAuthentication(authentication.BaseAuthentication):
-    
     def authenticate(self, request):
         
         # tries to get the 'jwt' cookie from database

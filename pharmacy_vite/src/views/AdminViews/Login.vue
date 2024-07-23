@@ -1,7 +1,7 @@
 <script setup>
     import { ref, onMounted, onBeforeUnmount } from 'vue';
     import '../../styles/styles.css';
-    import axios from '../../axios';
+    import axios from 'axios';
     import { useStore } from 'vuex';
     import { useToast } from 'primevue/usetoast';
     import { setCookie } from '../../services';
@@ -77,23 +77,30 @@
             warn("Required fields are not filled!", "Please fill in all the required fields with appropriate values.");
         }
         else {
-            axios.post("/administrator/login/", {
+            axios.post("/api/v1/jwt/create/", {
                 
                 "username": `${data.first_name}${data.last_name}`,
                 "password": data.password
             })
             .then( (response) => {
                 // Figured out that jwt was not being sent due to SameSite being set to Lax, and should be sent to None. But now the cookie is not being stored. To fix this and check the website.
-                setCookie('jwt', response.data.jwt);
+                
 
-                var username = `${data.first_name}${data.last_name}`;
-                store.dispatch('setIsRegistered', true);
-                store.dispatch('setUserType', 'administrator');
-                store.dispatch('setUsername', username);
+                axios.defaults.headers.common['Authorization'] = "JWT " + response.data.access
+                console.log(response)
+
+                store.dispatch('setLoginDetails', {
+                    'usertype': 'administrator',
+                    'username': `${data.first_name}${data.last_name}`,
+                    'isRegistered': true,
+                    'refreshToken': response.data.refresh
+                });
+
                 router.push('/admin')
             })
             .catch( (error) => {
                 // If an error is raised, not working now
+                axios.defaults.headers.common['Authorization'] = ""
                 console.log(error)
                 warn("Unauthorized credentials!", "Invalid username/password or unauthorized by the admin. Contact admin for further details.");
             })
