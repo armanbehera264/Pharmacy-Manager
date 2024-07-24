@@ -44,6 +44,6 @@
     </div>
 
     <div class="centered">
-        <Button label="small" class="routerlink" @click="$router.push('/')">Home Page</Button>
+        <Button label="small" class="routerlink" @click="$router.push({ name: 'Home' })">Home Page</Button>
     </div>
 </template>

@@ -11,7 +11,7 @@
     const expandedRows = ref();
 
     const store = useStore();
-    store.dispatch('updateState');
+    store.dispatch('initializeStore');
 
     axios.get('/api/v1/users/me')
     .then( (response) => {

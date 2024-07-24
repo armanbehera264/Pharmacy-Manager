@@ -59,7 +59,7 @@
     const deletionDialog = ref();
 
     const store = useStore();
-    store.dispatch('updateState');
+    store.dispatch('initializeStore');
     const toast = useToast();
 
     if (store.getters.isRegistered === true){

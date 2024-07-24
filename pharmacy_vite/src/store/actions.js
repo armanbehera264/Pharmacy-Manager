@@ -1,4 +1,4 @@
-export const updateState = ({ commit, getters }) => {
+export const initializeStore = ({ commit, getters }) => {
     const isRegistered = getters.isRegistered;
 
     if (isRegistered) {

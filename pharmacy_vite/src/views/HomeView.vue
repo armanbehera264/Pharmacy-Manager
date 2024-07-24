@@ -7,10 +7,9 @@
 
 <template>
     <div class="centered">
-      <!-- <HelloWorld msg="Welcome to Your Vue.js App"/>-->
-        <Button class="routerlink" @click="$router.push('/admin/login')">Admin Login</Button>
-        <Button class="routerlink" @click="$router.push('/doctor/login')">Doctor Login</Button>
-        <Button class="routerlink" @click="$router.push('/frontdesk/login')">Front Desk Login</Button>
-        <Button class="routerlink" @click="$router.push('/employee/login')">Employee Login</Button>
+        <Button class="routerlink" @click="$router.push({ name: 'AdminLogin' })">Admin Login</Button>
+        <Button class="routerlink" @click="$router.push({ name: 'DoctorLogin' })">Doctor Login</Button>
+        <Button class="routerlink" @click="$router.push({ name: 'FrontDeskLogin' })">Front Desk Login</Button>
+        <Button class="routerlink" @click="$router.push({ name: 'EmployeeLogin' })">Employee Login</Button>
     </div>
 </template>

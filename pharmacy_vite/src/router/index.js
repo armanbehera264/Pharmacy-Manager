@@ -56,7 +56,7 @@ const routes = [
     ]
   },
   {
-    path: '/admin',
+    path: '/administrator',
     component: Admin,
     children: [
       {
@@ -113,7 +113,7 @@ const routes = [
       },
       {
         path: 'login',
-        name: 'FronDeskLogin',
+        name: 'FrontDeskLogin',
         component: FrontDeskLogin
       }
     ]

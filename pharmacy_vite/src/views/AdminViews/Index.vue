@@ -3,9 +3,11 @@
     import { watch } from 'vue';
     import { ref, computed } from 'vue';
     import { useStore } from 'vuex';
+    import axios from 'axios';
     
     const store = useStore();
     const drawerVisible = ref(false);
+    store.dispatch('initializeStore');
 
     const items = ref([
         {
@@ -14,7 +16,7 @@
             loggedIn: false,
             loggedOut: true,
             command: () => {
-                router.push('/admin/')
+                router.push({ name: 'AdminHomePage' })
             }
         },
         {
@@ -32,7 +34,7 @@
             loggedIn: false,
             loggedOut: true,
             command: () => {
-                router.push('/admin/login')
+                router.push({ name: 'AdminLogin' })
             }
         },
         {
@@ -41,19 +43,43 @@
             loggedIn: true,
             loggedOut: false,
             command: () => {
-                router.push('/logout')
+                router.push({ name: 'Logout'})
             }
         }
     ]);
 
     const loggedIn = computed(() => store.state.isRegistered);
 
+    const getAccess = () => {
+
+        const refreshToken = store.state.refreshToken
+
+        axios.post('/api/v1/jwt/refresh/', refreshToken)
+        .then( (response) => {
+            axios.defaults.headers.common['Authorization'] = "JWT " + response.data.access
+            console.log(response);
+        })
+        .then( (error) => {
+            console.log(error)
+            const userDetails = store.getters.isRegistered
+            router.push(`/${userDetails.usertype}/login`)
+        })
+    }
+
     watch(loggedIn, (newVal, oldVal) => {
         
+        console.log('asdasdas')
         if (newVal === true){
-            console.log(`newVal: ${newVal}`)
-        }
-            
+            // The access token is refreshed every 19 minutes
+            /*setInterval(() => {
+                getAccess();
+            }, 1140000);*/
+            console.log('newVal is set to true.')
+            /*setInterval(() => {
+                getAccess();
+                console.log('The code is being repeated.')
+            }, 5000);*/
+        }   
     });
 </script>
 
