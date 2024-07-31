@@ -3,7 +3,7 @@
     import { watch } from 'vue';
     import { ref, computed } from 'vue';
     import { useStore } from 'vuex';
-    import axios from 'axios';
+    import axios from '../../axios';
     
     const store = useStore();
     const drawerVisible = ref(false);
@@ -50,7 +50,7 @@
 
     const loggedIn = computed(() => store.state.isRegistered);
 
-    const getAccess = () => {
+    /*const getAccess = () => {
 
         const refreshToken = store.state.refreshToken
 
@@ -59,10 +59,8 @@
             axios.defaults.headers.common['Authorization'] = "JWT " + response.data.access
             console.log(response);
         })
-        .then( (error) => {
+        .catch( (error) => {
             console.log(error)
-            const userDetails = store.getters.isRegistered
-            router.push(`/${userDetails.usertype}/login`)
         })
     }
 
@@ -74,13 +72,13 @@
             /*setInterval(() => {
                 getAccess();
             }, 1140000);*/
-            console.log('newVal is set to true.')
+            
             /*setInterval(() => {
                 getAccess();
                 console.log('The code is being repeated.')
-            }, 5000);*/
+            }, 5000);
         }   
-    });
+    });*/
 </script>
 
 <template>

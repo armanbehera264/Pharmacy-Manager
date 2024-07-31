@@ -15,20 +15,20 @@ const getRefreshToken = () => {
 const refreshAccessToken = () => {
     const refreshToken = getRefreshToken()
 
-    axios.post('/api/v1/jwt/refresh/', refreshToken)
+    instance.post('/api/v1/jwt/refresh/', { refresh: refreshToken })
     .then( (response) => {
         const accessToken = response.data.access;
         localStorage.setItem('accessToken', accessToken)
         return accessToken
     })
-    .then( (error) => {
+    .catch( (error) => {
         if (error.response.status === 401) {
             console.log("Refresh token expired. Please log in again.")
             const usertype = localStorage.getItem('usertype')
             router.push(`/${usertype}/login`)
         }
         else {
-            console.error(err.response)
+            console.error(error.response)
         }
         return null
     })
@@ -36,12 +36,12 @@ const refreshAccessToken = () => {
 
 instance.interceptors.request.use(
     async (config) => {
-        const accessToken = getAccessToken();
+        let accessToken = getAccessToken();
 
-        if (!token) {
+        if (!accessToken) {
             accessToken = await refreshAccessToken();
         }
-        if (token) {
+        if (accessToken) {
             config.headers['Authorization'] = `JWT ${accessToken}`
         }
 
@@ -60,7 +60,7 @@ instance.interceptors.response.use(
         const originalRequest = error.config
 
         if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+            originalRequest._retry = true; // Used to prevent infinite retry loops
             const newAccessToken = await refreshAccessToken();
             if (newAccessToken) {
                 originalRequest.headers['Authorization'] = `JWT ${newAccessToken}`;

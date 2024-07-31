@@ -1,5 +1,5 @@
 <script setup>
-    import axios from 'axios';
+    import axios from '../../axios';
     import { useStore } from 'vuex';
     import { ref } from 'vue';
 
@@ -17,7 +17,7 @@
     .then( (response) => {
         console.log(response)
     })
-    .then( (error) => {
+    .catch( (error) => {
         console.log(error)
     })
     

@@ -2,8 +2,6 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import axios from 'axios';
-
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura'
 import './styles/tailwind.css';
@@ -49,10 +47,6 @@ app.use(PrimeVue, {
     }
 });
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000'
-
-
-
 app.component('InputText', InputText);
 app.component('DatePicker', DatePicker);
 app.component('Button', Button);
@@ -75,7 +69,7 @@ app.component('ExpandableDataTable', ExpandableDataTable);
 app.component('CustomDrawer', CustomDrawer);
 
 app.use(store);
-app.use(router, axios);
+app.use(router);
 app.use(ToastService);
 
 app.mount('#app');
