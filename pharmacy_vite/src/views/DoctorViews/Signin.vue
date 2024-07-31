@@ -2,7 +2,7 @@
     // to add fields: specialization
     import { ref } from 'vue';
     import '../../styles/styles.css';
-    import axios from 'axios';
+    import axios from '../../axios';
     import router from '../../router' 
     import { useToast } from 'primevue/usetoast';
     import { onMounted, onBeforeUnmount } from 'vue';
@@ -134,7 +134,7 @@
             .then( (response) => {
                 router.push('/doctor/login')
             })
-            .then( (error) => {
+            .catch( (error) => {
                 console.log(error);
             })
         }

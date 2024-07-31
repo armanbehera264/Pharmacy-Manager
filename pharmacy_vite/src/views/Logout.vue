@@ -32,7 +32,6 @@
             .catch( (error) => {
                 message.value = "Logout unsuccessful!"
                 console.log(error);
-                store.dispatch('logout')
             })
         }
     })

@@ -1,33 +1,24 @@
 from django.conf import settings
 from rest_framework import authentication, exceptions
 import jwt
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import User
 
 class CustomUserAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         
-        # tries to get the 'jwt' cookie from database
-        token = request.COOKIES.get("jwt")
+        JWT_authenticator = JWTAuthentication()
+        # token = request.META.get('HTTP_AUTHORIZATION', None)
         
-        # if the token does not exist
-        if not token:
-            try:
-                token = request.data["cookie"]
-            except KeyError:
-                return None
+        # Checks the request for validity
+        response = JWT_authenticator.authenticate(request)
         
-        if not token:
-            return None
-        
-        # Tries to decode the token
-        try:
-            payload = jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
-        except jwt.exceptions.DecodeError as e:
-            raise exceptions.AuthenticationFailed(f"Unauthorized {e}")
-        
-        # Returns a user that is decoded from the token
-        user = User.objects.filter(id=payload["id"]).first()
+        if response is not None:
+            # unpacking
+            user, token = response
+        else:
+            raise exceptions.AuthenticationFailed('Invalid Access Token.')
         
         return (user, None)
     
@@ -36,23 +27,19 @@ class CustomDoctorAuthentication(authentication.BaseAuthentication):
     
     def authenticate(self, request):
         
-         # tries to get the 'jwt' cookie from database
-        token = request.COOKIES.get("jwt")
+        JWT_authenticator = JWTAuthentication()
+        # token = request.META.get('HTTP_AUTHORIZATION', None)
         
-        # if the token does not exist
-        if not token:
-            return None
+        # Checks the request for validity
+        response = JWT_authenticator.authenticate(request)
         
-        # Tries to decode the token
-        try:
-            payload = jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
-        except:
-            raise exceptions.AuthenticationFailed("Unauthorized")
-        
-        # Returns a user that is decoded from the token
-        user = User.objects.filter(id=payload["id"]).first()
+        if response is not None:
+            # unpacking
+            user, token = response
+        else:
+            raise exceptions.AuthenticationFailed('Invalid Access Token.')
         
         if user.role != 'Doctor':
-            raise exceptions.AuthenticationFailed("Unauthorized. Only users with doctor role are allowed in this point.")
+            raise exceptions.PermissionDenied("Unauthorized.")
         
         return (user, None)

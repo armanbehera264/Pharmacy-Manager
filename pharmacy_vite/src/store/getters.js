@@ -22,8 +22,9 @@ export const getUserDetails = state => {
         const usertype = localStorage.getItem('usertype');
         const username = localStorage.getItem('username');
         const refreshToken = localStorage.getItem('refreshToken')
+        const accessToken = localStorage.getItem('accessToken')
 
-        return {'usertype' : usertype, 'username' : username, 'refreshToken': refreshToken}
+        return {'usertype' : usertype, 'username' : username, 'refreshToken': refreshToken, 'accessToken': accessToken}
     }
-    return {'usertype' : '', 'username' : '', 'refreshToken': ''}
+    return {'usertype' : '', 'username' : '', 'refreshToken': '', 'accessToken': ''}
 }

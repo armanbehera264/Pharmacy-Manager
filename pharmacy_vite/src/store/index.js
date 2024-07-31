@@ -8,7 +8,8 @@ const state = {
   isRegistered: false,
   username: '',
   usertype: '',
-  refreshToken: ''
+  refreshToken: '',
+  accessToken: ''
 }
 
 export default createStore({

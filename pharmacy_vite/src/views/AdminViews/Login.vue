@@ -84,18 +84,14 @@
             })
             .then( (response) => {
                 // Figured out that jwt was not being sent due to SameSite being set to Lax, and should be sent to None. But now the cookie is not being stored. To fix this and check the website.
-                
-
-                axios.defaults.headers.common['Authorization'] = "JWT " + response.data.access
-                console.log(response)
 
                 store.dispatch('setLoginDetails', {
                     'usertype': 'administrator',
                     'username': `${data.first_name}${data.last_name}`,
                     'isRegistered': true,
-                    'refreshToken': response.data.refresh
+                    'refreshToken': response.data.refresh,
+                    'accessToken': response.data.access
                 });
-                localStorage.setItem('accessToken', response.data.access)
 
                 router.push({ name: 'AdminHomePage' })
             })

@@ -5,52 +5,7 @@
     import { useToast } from 'primevue/usetoast';
     import { setCookie, getCookieValue } from '../../services.js'
 
-    /*const data = ref([
-        {
-            "id": 1,
-            "last_login": null,
-            "is_superuser": false,
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-07-07T05:46:59.808432Z",
-            "username": "ArmanBeheraregistered",
-            "email": "armanbehera264@gmail.com",
-            "first_name": "Arman",
-            "last_name": "Behera",
-            "age": 60,
-            "gender": "Male",
-            "primary_phone_number": "07681075012",
-            "secondary_phone_number": "07681075012",
-            "role": "Doctor",
-            "is_verified": false,
-            "occupation": "Doctor",
-            "groups": [],
-            "user_permissions": []
-        },
-        {
-            "id": 2,
-            "last_login": null,
-            "is_superuser": false,
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-07-07T05:47:53.082171Z",
-            "username": "ArmanBeheraisregistered",
-            "email": "armanbehera264@gmail.com",
-            "first_name": "Arman",
-            "last_name": "Behera",
-            "age": 60,
-            "gender": "Male",
-            "primary_phone_number": "07681075012",
-            "secondary_phone_number": "0",
-            "role": "Doctor",
-            "is_verified": false,
-            "occupation": "Doctor",
-            "groups": [],
-            "user_permissions": []
-        }
-    ])*/
-
-    const data = ref();
+    const data = ref()
 
     const message = ref();
     const selected = ref();
@@ -63,12 +18,12 @@
     const toast = useToast();
 
     if (store.getters.isRegistered === true){
-        axios.get('/api/v1/users/me/')
+        axios.get('/administrator/verifyEmployees/')
         .then( (response) => {
-            console.log(response)
-            // data.value = response
+            console.log(response.data)
+            data.value = response.data
         })
-        .then( (error) => {
+        .catch( (error) => {
             console.log(error)
             message.value = "Log in using an admin account to access this page."
         })
@@ -111,13 +66,13 @@
     <Toast/>
 
     <div class="centered">
-        <h1>{{ message }}</h1>
+        <h1 class="text-3xl font-bold m-3"> {{ message }}</h1>
     </div>
     
     <div class="top-container">
         
         <div class="container">
-            <h1>Verify Employees</h1>
+            <h1 class="text-xl font-bold">Verify Employees</h1>
             <div class="sub-container" style="margin-left:7rem;">
                 <div class="card">
                     <DataTable :value="data" v-model:selection="selected" datakey="id" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
