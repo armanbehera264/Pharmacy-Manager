@@ -17,6 +17,15 @@
             }
         },
         {
+            label: 'Signin',
+            icon: 'pi pi-sign-in',
+            loggedIn: false,
+            loggedOut: true,
+            command: () => {
+                router.push('/doctor/signin')
+            }
+        },
+        {
             label: 'Login',
             icon: 'pi pi-user',
             loggedIn: false,

@@ -5,6 +5,7 @@ const instance = axios.create({
 });
 
 const getAccessToken = () => {
+    
     return localStorage.getItem('accessToken');
 };
 
@@ -15,52 +16,39 @@ const getRefreshToken = () => {
 const refreshAccessToken = () => {
     const refreshToken = getRefreshToken()
 
-    instance.post('/api/v1/jwt/refresh/', { refresh: refreshToken })
+    instance.post('api/v1/jwt/refresh', { refresh: refreshToken })
     .then( (response) => {
         const accessToken = response.data.access;
         localStorage.setItem('accessToken', accessToken)
         return accessToken
     })
-    .catch( (error) => {
-        if (error.response.status === 401) {
-            console.log("Refresh token expired. Please log in again.")
-            const usertype = localStorage.getItem('usertype')
-            router.push(`/${usertype}/login`)
-        }
-        else {
-            console.error(error.response)
-        }
-        return null
-    })
 }
 
 instance.interceptors.request.use(
-    async (config) => {
+    async(config) => {
         let accessToken = getAccessToken();
 
-        if (!accessToken) {
-            accessToken = await refreshAccessToken();
-        }
         if (accessToken) {
             config.headers['Authorization'] = `JWT ${accessToken}`
         }
 
-        return config;
+        return config
     },
     (error) => {
         return Promise.reject(error)
-    }   
+    }
 )
 
 instance.interceptors.response.use(
     (response) => {
-        return response;
+        return response
     },
     async (error) => {
         const originalRequest = error.config
 
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true; // Used to prevent infinite retry loops
+        console.log(error.response.status)
+        if (error.response.status === 403 && !originalRequest._retry) {
+            originalRequest._retry = true;
             const newAccessToken = await refreshAccessToken();
             if (newAccessToken) {
                 originalRequest.headers['Authorization'] = `JWT ${newAccessToken}`;
@@ -69,6 +57,6 @@ instance.interceptors.response.use(
         }
         return Promise.reject(error);
     }
-);
+)
 
 export default instance;

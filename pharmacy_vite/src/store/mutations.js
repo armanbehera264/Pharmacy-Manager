@@ -24,5 +24,7 @@ export default {
         state.usertype = '';
         state.isRegistered = false;
         state.username = '';
+        state.accessToken = '';
+        state.refreshToken = '';
     }
 }

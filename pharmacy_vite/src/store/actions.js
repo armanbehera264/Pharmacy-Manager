@@ -25,6 +25,7 @@ export const setLoginDetails = ({ commit }, payload) => {
     localStorage.setItem('username', payload.username);
     localStorage.setItem('isRegistered', JSON.stringify(payload.isRegistered));
     localStorage.setItem('refreshToken', payload.refreshToken);
+    localStorage.setItem('accessToken', payload.accessToken);
 
     commit('setUserType', payload.usertype);
     commit('setUsername', payload.username);

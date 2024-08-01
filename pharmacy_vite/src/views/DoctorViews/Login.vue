@@ -80,7 +80,7 @@
             warn("Required fields are not filled!", "Please fill in all the required fields with appropriate values.");
         }
         else {
-            axios.post("/doctor/login/", {
+            axios.post("/api/v1/jwt/create/", {
                 
                 "username": `${data.first_name}${data.last_name}${data.registration_number}`,
                 "password": data.password

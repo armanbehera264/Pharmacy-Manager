@@ -20,7 +20,6 @@
     if (store.getters.isRegistered === true){
         axios.get('/administrator/verifyEmployees/')
         .then( (response) => {
-            console.log(response.data)
             data.value = response.data
         })
         .catch( (error) => {
@@ -37,29 +36,42 @@
     }
 
     const confirmDeletion = () => {
-      deletionDialog.value = true;
+        deletionDialog.value = true;
     }
 
-    // To send post request to the backend
-    const sendVerification = () => {
-        
-        console.log(selected.value.id)
-        data.value = data.value.filter(val => !selected.value.includes(val));
-        selected.value = null;
+    const sendRequest = (code) => {
+
         verificationDialog.value = false;
-        toast.add({severity:'success', summary: 'Successfully verified users!', life: 3000});
-    }
-
-    // To post request to the backend
-    const sendDelete = () => {
-
-        console.log(selected.value)
-        data.value = data.value.filter(val => !selected.value.includes(val));
-        selected.value = null;
         deletionDialog.value = false;
-        toast.add({severity:'success', summary: 'Successfully deleted users!', life: 3000});
+        let idArray = []
+
+        for (let i = 0; i < selected.value.length; i++) {
+            idArray.push(selected.value[i]['id'])
+        }
+
+        axios.post("/administrator/verifyEmployees/", { code: code, ids: idArray })
+        .then( (response) => {
+            console.log(response)
+            console.log(idArray)
+            data.value = data.value.filter(val => !selected.value.includes(val));
+            selected.value = null;
+
+            if (code == 0){
+                toast.add({severity:'success', summary: 'Successfully verified users!', life: 3000});
+            } else {
+                toast.add({severity:'success', summary: 'Successfully deleted users!', life: 3000});
+            }
+        })
+        .catch( (error) => {
+            console.log(error)
+            if (code == 0){
+                toast.add({severity:'warn', summary: 'Unsuccesful in verifying users.', message: 'Please try again.', life:3000});
+            } else {
+                toast.add({severity:'warn', summary: 'Unsuccesful in deleting users.', message: 'Please try again.', life:3000});
+
+            }
+        })
     }
-    
 </script>
 
 <template>
@@ -72,7 +84,9 @@
     <div class="top-container">
         
         <div class="container">
-            <h1 class="text-xl font-bold">Verify Employees</h1>
+            <div class="centered">
+                <h1 class="text-xl font-bold m-2">Verify Employees</h1>
+            </div>
             <div class="sub-container" style="margin-left:7rem;">
                 <div class="card">
                     <DataTable :value="data" v-model:selection="selected" datakey="id" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
@@ -81,7 +95,7 @@
                         <Column field="first_name" header="First Name" style="width: 20%" sortable></Column>
                         <Column field="last_name" header="Last Name" style="width: 20%" sortable></Column>
                         <Column field="role" header="Role" style="width: 20%" sortable></Column>
-                        <Column field="email" header="Email" style="width:50%" sortable></Column>
+                        <Column field="username" header="Email" style="width:50%" sortable></Column>
                     </DataTable>
                 </div>
             </div>
@@ -100,7 +114,7 @@
         </div>
         <template #footer>
             <Button label="No" icon="pi pi-times" text @click="verificationDialog = false"/>
-            <Button label="Yes" icon="pi pi-check" text @click="sendVerification"/>
+            <Button label="Yes" icon="pi pi-check" text @click="sendRequest(0)"/>
         </template>
     </Dialog>
 
@@ -111,7 +125,7 @@
         </div>
         <template #footer>
             <Button label="No" icon="pi pi-times" text @click="deletionDialog = false"/>
-            <Button label="Yes" icon="pi pi-check" text @click="sendDelete"/>
+            <Button label="Yes" icon="pi pi-check" text @click="sendRequest(1)"/>
         </template>
     </Dialog>
 

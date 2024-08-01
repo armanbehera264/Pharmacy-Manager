@@ -90,13 +90,28 @@ class VerifyEmployees(views.APIView):
     def post(self, request):
         
         # Credentials of the user to be set to verified
-        username = request.data['username']
+        ids = request.data['ids']
+        code = request.data['code']
         
-        user = User.objects.get(username=username)
-        user.is_verified = True
+        print(f'\nids: {ids} code: {code}')
         
-        return response.Response('User successfully verified.')
-
+        for id in ids:
+            user = User.objects.get(id=id)
+            print(user)
+            if code == 0:
+                user.is_verified = True
+                user.save()
+            elif code == 1:
+                user.delete()
+        
+        if code == 0:
+            return response.Response('Users successfully verified.')
+        elif code == 1:
+            return response.Response('Users succesfully deleted.')
+        else:
+            return exceptions.NotAcceptable('The code provided is not a valid code.')
+        
+        
 class Logout(views.APIView):
     '''
         Logout view can only be accessed by authenticated users
@@ -111,4 +126,3 @@ class Logout(views.APIView):
         resp.data = {"message": "Successfully logged out user."}
         
         return resp
-        

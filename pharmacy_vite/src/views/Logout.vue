@@ -14,13 +14,9 @@
             const usertype = store.getters.getUserDetails['usertype']
             const url = '/' + usertype + '/logout/'
 
-            const cookie = getCookieValue("jwt")
-            console.log(cookie)
-
             axios.post(url, 
             { 
                 "logout" : true,
-                "cookie" : cookie
             }, 
             {
                 withCredentials: true
