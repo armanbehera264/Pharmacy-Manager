@@ -49,36 +49,6 @@
     ]);
 
     const loggedIn = computed(() => store.state.isRegistered);
-
-    /*const getAccess = () => {
-
-        const refreshToken = store.state.refreshToken
-
-        axios.post('/api/v1/jwt/refresh/', refreshToken)
-        .then( (response) => {
-            axios.defaults.headers.common['Authorization'] = "JWT " + response.data.access
-            console.log(response);
-        })
-        .catch( (error) => {
-            console.log(error)
-        })
-    }
-
-    watch(loggedIn, (newVal, oldVal) => {
-        
-        console.log('asdasdas')
-        if (newVal === true){
-            // The access token is refreshed every 19 minutes
-            /*setInterval(() => {
-                getAccess();
-            }, 1140000);*/
-            
-            /*setInterval(() => {
-                getAccess();
-                console.log('The code is being repeated.')
-            }, 5000);
-        }   
-    });*/
 </script>
 
 <template>

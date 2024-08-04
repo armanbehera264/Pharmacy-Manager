@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'djoser',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+    'api'
 ]
 
 REST_FRAMEWORK = {
