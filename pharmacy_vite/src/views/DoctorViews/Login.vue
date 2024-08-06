@@ -4,7 +4,6 @@
     import axios from 'axios';
     import { useStore } from 'vuex';
     import { useToast } from 'primevue/usetoast';
-    import { setCookie } from '../../services';
     import router from '../../router' 
     
     const first_name = ref('');

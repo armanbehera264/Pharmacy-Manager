@@ -7,8 +7,9 @@ export default {
         state.isRegistered = isRegistered;
     },
 
-    setUsername(state, username) {
-        state.username = username;
+    setUsername(state, firstName, lastName) {
+        state.firstName = firstName;
+        state.lastName = lastName;
     },
     
     setRefreshToken(state, refresh) {
@@ -23,8 +24,9 @@ export default {
 
         state.usertype = '';
         state.isRegistered = false;
-        state.username = '';
         state.accessToken = '';
         state.refreshToken = '';
+        state.firstName = '';
+        state.lastName = '';
     }
 }

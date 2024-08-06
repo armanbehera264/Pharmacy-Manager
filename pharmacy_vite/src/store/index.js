@@ -6,10 +6,11 @@ import mutations from './mutations';
 
 const state = {
   isRegistered: false,
-  username: '',
   usertype: '',
   refreshToken: '',
-  accessToken: ''
+  accessToken: '',
+  firstName: '',
+  lastName: ''
 }
 
 export default createStore({

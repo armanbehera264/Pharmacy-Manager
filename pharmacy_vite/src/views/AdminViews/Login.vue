@@ -4,7 +4,6 @@
     import axios from '../../axios';
     import { useStore } from 'vuex';
     import { useToast } from 'primevue/usetoast';
-    import { setCookie } from '../../services';
     import router from '../../router' 
     
     const first_name = ref('');
@@ -87,10 +86,11 @@
 
                 store.dispatch('setLoginDetails', {
                     'usertype': 'administrator',
-                    'username': `${data.first_name}${data.last_name}`,
                     'isRegistered': true,
                     'refreshToken': response.data.refresh,
-                    'accessToken': response.data.access
+                    'accessToken': response.data.access,
+                    'firstName': data.first_name,
+                    'lastName': data.last_name
                 });
 
                 router.push({ name: 'AdminHomePage' })

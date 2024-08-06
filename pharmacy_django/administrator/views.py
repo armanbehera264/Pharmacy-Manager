@@ -72,14 +72,9 @@ class VerifyEmployees(views.APIView):
     
     def get(self, request):
         
-        unverifiedDoctors = User.objects.filter(role='Doctor', is_verified=False)
-        unverifiedEmployees = User.objects.filter(role='Employee', is_verified=False)
+        unverifiedEmployees = User.objects.filter(is_verified=False)
         
         resp = []
-        
-        for user in unverifiedDoctors:
-            user_serializer = UserSerializer(user)
-            resp.append(user_serializer.data)
             
         for user in unverifiedEmployees:
             user_serializer = UserSerializer(user)
@@ -93,16 +88,16 @@ class VerifyEmployees(views.APIView):
         ids = request.data['ids']
         code = request.data['code']
         
-        print(f'\nids: {ids} code: {code}')
-        
-        for id in ids:
-            user = User.objects.get(id=id)
-            print(user)
-            if code == 0:
-                user.is_verified = True
-                user.save()
-            elif code == 1:
-                user.delete()
+        try:
+            for id in ids:
+                user = User.objects.get(id=id)
+                if code == 0:
+                    user.is_verified = True
+                    user.save()
+                elif code == 1:
+                    user.delete()
+        except:
+            return exceptions.NotAcceptable('Failed to delete users.')
         
         if code == 0:
             return response.Response('Users successfully verified.')
@@ -111,7 +106,36 @@ class VerifyEmployees(views.APIView):
         else:
             return exceptions.NotAcceptable('The code provided is not a valid code.')
         
+
+class ViewEmployees(views.APIView):
+    authentication_classes = (authentication.CustomUserAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, )
+    
+    def get(self, request):
         
+        users = User.objects.all()
+        
+        resp = []
+        
+        for user in users:
+            user_serializer = UserSerializer(user)
+            resp.append(user_serializer.data)
+            
+        return response.Response(resp)
+    
+    def post(self, request):
+        
+        ids = request.data['ids']
+        
+        try:
+            for id in ids:
+                user = User.objects.get(id=id)
+                user.delete()
+        except:
+            return exceptions.NotAcceptable('Failed to delete users.')
+            
+        return response.Response('Users successfully deleted from system.')
+
 class Logout(views.APIView):
     '''
         Logout view can only be accessed by authenticated users

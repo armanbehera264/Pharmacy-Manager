@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from administrator.models import User
 class DoctorUser(models.Model):
     # specialization = models.ManyToManyField(SpecializationAvailable, blank=True, on_delete=models.PROTECT, related_name="doctors")
-    user = models.OneToOneField(User, verbose_name=("User"), on_delete=models.RESTRICT)
+    user = models.OneToOneField(User, verbose_name=("User"), on_delete=models.CASCADE)
     consultation_fee = models.IntegerField(validators=[MinValueValidator(0)], blank=False, default=None)
     experience = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(150)], blank=True, default=None)
     registration_number = models.CharField(unique=True, blank=False, default=None, max_length=50)

@@ -1,18 +1,5 @@
 export const isRegistered = state => {
-    const isRegistered = localStorage.getItem('isRegistered');
-
-    if (isRegistered !== null) {
-        if (isRegistered === 'true') {
-
-            const usertype = localStorage.getItem('usertype');
-            const username = localStorage.getItem('username');
-
-            if (usertype !== null && username !== null) {
-                return true
-            }
-        }
-    }
-    return false
+    return JSON.parse(localStorage.getItem('isRegistered'))
 }
 
 export const getUserDetails = state => {
@@ -20,11 +7,13 @@ export const getUserDetails = state => {
     if (isRegistered) {
 
         const usertype = localStorage.getItem('usertype');
-        const username = localStorage.getItem('username');
         const refreshToken = localStorage.getItem('refreshToken')
         const accessToken = localStorage.getItem('accessToken')
+        const firstName = localStorage.getItem('firstName')
+        const lastName = localStorage.getItem('lastName')
 
-        return {'usertype' : usertype, 'username' : username, 'refreshToken': refreshToken, 'accessToken': accessToken}
+        return {'usertype' : usertype, 'refreshToken': refreshToken, 'accessToken': accessToken, 'firstName': firstName, 'lastName': lastName }
     }
-    return {'usertype' : '', 'username' : '', 'refreshToken': '', 'accessToken': ''}
+
+    return {'usertype' : '', 'refreshToken': '', 'accessToken': '', 'firstName': '', 'lastName': ''}
 }

@@ -20,12 +20,21 @@
             }
         },
         {
-            label: 'Menu',
+            label: '',
             icon: 'pi pi-bars',
             loggedIn: true,
             loggedOut: false,
             command: () => {
                 drawerVisible.value = true;
+            }
+        },
+        {
+            label: 'Home',
+            icon: 'pi pi-home',
+            loggedIn: true,
+            loggedOut: false,
+            command: () => {
+                router.push('/administrator/')
             }
         },
         {
@@ -57,16 +66,16 @@
         <CustomDrawer v-model:visible="drawerVisible" heading="Admin Page"/>
     </div>
     <Menubar :model="items">
-        <template #start>
-            <svg width="50" height="40">
-                <image href="../../assets/Pharmacy.png" x="2" y="2" height="36" width="36"/>
-            </svg>
-        </template>
         <template #item="{ item, props }">
             <a v-if="item.loggedIn == loggedIn || item.loggedOut == !loggedIn" :target="item.target" v-bind="props.action">
                 <span :class="item.icon" />
                 <span class="ml-2">{{ item.label }}</span>
             </a>
+        </template>
+        <template #end>
+            <svg width="50" height="40">
+                <image href="../../assets/Pharmacy.png" x="2" y="2" height="36" width="36"/>
+            </svg>
         </template>
     </Menubar>
     <router-view/>

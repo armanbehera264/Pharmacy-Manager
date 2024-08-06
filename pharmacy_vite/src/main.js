@@ -27,7 +27,6 @@ import Drawer from 'primevue/drawer';
 
 // Importing Custom components
 import CustomPassword from './components/CustomPassword.vue';
-import ExpandableDataTable from './components/ExpandableDataTable.vue';
 import CustomDrawer from './components/CustomDrawer.vue';
 
 import 'primeicons/primeicons.css';
@@ -65,7 +64,6 @@ app.component('Row', Row);
 app.component('Drawer', Drawer)
 
 app.component('CustomPassword', CustomPassword);
-app.component('ExpandableDataTable', ExpandableDataTable);
 app.component('CustomDrawer', CustomDrawer);
 
 app.use(store);

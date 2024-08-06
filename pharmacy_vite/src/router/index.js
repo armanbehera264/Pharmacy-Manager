@@ -12,6 +12,7 @@ import Admin from '../views/AdminViews/Index.vue'
 import AdminHomePage from '../views/AdminViews/HomePage.vue'
 import AdminLogin from '../views/AdminViews/Login.vue'
 import VerifyEmployees from '../views/AdminViews/VerifyEmployees.vue'
+import ViewEmployees from '../views/AdminViews/ViewEmployees.vue'
 
 const routes = [
   {
@@ -60,9 +61,14 @@ const routes = [
         component: AdminLogin
       },
       {
-        path: 'verifyEmployees',
+        path: 'VerifyEmployees',
         name: 'VerifyEmployees',
         component: VerifyEmployees
+      },
+      {
+        path: 'ViewEmployees',
+        name: 'ViewEmployees',
+        component: ViewEmployees
       }
     ]
   }

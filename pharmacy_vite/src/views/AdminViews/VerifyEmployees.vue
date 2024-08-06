@@ -3,9 +3,9 @@
     import { useStore } from 'vuex';
     import { ref } from 'vue';
     import { useToast } from 'primevue/usetoast';
-    import { setCookie, getCookieValue } from '../../services.js'
 
-    const data = ref()
+    const data = ref(['1'])
+    const length = ref(-1) // Length of the data 
 
     const message = ref();
     const selected = ref();
@@ -17,10 +17,12 @@
     store.dispatch('initializeStore');
     const toast = useToast();
 
-    if (store.getters.isRegistered === true){
+    if (store.getters.isRegistered){
         axios.get('/administrator/verifyEmployees/')
         .then( (response) => {
             data.value = response.data
+            length.value = data.value.length
+            console.log(length.value)
         })
         .catch( (error) => {
             console.log(error)
@@ -51,8 +53,6 @@
 
         axios.post("/administrator/verifyEmployees/", { code: code, ids: idArray })
         .then( (response) => {
-            console.log(response)
-            console.log(idArray)
             data.value = data.value.filter(val => !selected.value.includes(val));
             selected.value = null;
 
@@ -68,7 +68,6 @@
                 toast.add({severity:'warn', summary: 'Unsuccesful in verifying users.', message: 'Please try again.', life:3000});
             } else {
                 toast.add({severity:'warn', summary: 'Unsuccesful in deleting users.', message: 'Please try again.', life:3000});
-
             }
         })
     }
@@ -84,10 +83,10 @@
     <div class="top-container">
         
         <div class="container">
-            <div class="centered">
+            <div class="centered" v-if="length > 0">
                 <h1 class="text-xl font-bold m-2">Verify Employees</h1>
             </div>
-            <div class="sub-container" style="margin-left:7rem;">
+            <div class="sub-container" style="margin-left:7rem;" v-if="length != 0">
                 <div class="card">
                     <DataTable :value="data" v-model:selection="selected" datakey="id" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
                         
@@ -95,12 +94,15 @@
                         <Column field="first_name" header="First Name" style="width: 20%" sortable></Column>
                         <Column field="last_name" header="Last Name" style="width: 20%" sortable></Column>
                         <Column field="role" header="Role" style="width: 20%" sortable></Column>
-                        <Column field="username" header="Email" style="width:50%" sortable></Column>
+                        <Column field="email" header="Email" style="width:50%" sortable></Column>
                     </DataTable>
                 </div>
             </div>
+            <div class="centered" v-if="length == 0">
+                <h1 class="text-l font-bold m-2">All users are verified!</h1>
+            </div>
             
-            <div class="sub-container"> 
+            <div class="sub-container" v-if="length > 0"> 
                 <Button label="Verify" icon="pi pi-check-circle" severity="success" @click="confirmVerification" style="margin-left: 25rem; margin-top: 3rem;" :disabled="!selected || !selected.length"/>
                 <Button label="Delete" icon="pi pi-trash" severity="danger" @click="confirmDeletion" style="margin-left: 2rem; margin-top: 3rem;" :disabled="!selected || !selected.length"/>
             </div>    
@@ -128,5 +130,4 @@
             <Button label="Yes" icon="pi pi-check" text @click="sendRequest(1)"/>
         </template>
     </Dialog>
-
 </template>

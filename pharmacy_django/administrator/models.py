@@ -126,7 +126,6 @@ class User(AbstractUser):
         return f"Name: {self.username}"
     
 
-
 class SpecializationAvailable(models.Model):
     '''
         Stores all the specializations available

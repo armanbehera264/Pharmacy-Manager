@@ -3,13 +3,11 @@
     import { onMounted } from 'vue';
     import { useStore } from 'vuex';
     import { ref } from 'vue';
-    import { getCookieValue } from '../services'
 
     const message = ref('');
 
     onMounted (() => {
         const store = useStore()
-        
         if (store.getters.isRegistered === true){ 
             const usertype = store.getters.getUserDetails['usertype']
             const url = '/' + usertype + '/logout/'
