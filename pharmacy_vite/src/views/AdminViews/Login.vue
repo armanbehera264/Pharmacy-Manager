@@ -5,6 +5,7 @@
     import { useStore } from 'vuex';
     import { useToast } from 'primevue/usetoast';
     import router from '../../router' 
+    import '../../styles/styles.css';
     
     const first_name = ref('');
     const last_name = ref('');

@@ -3,6 +3,7 @@
     import { useStore } from 'vuex';
     import { ref } from 'vue';
     import { useToast } from 'primevue/usetoast';
+    import '../../styles/styles.css';
 
     const data = ref(['1'])
     const length = ref(-1) // Length of the data 

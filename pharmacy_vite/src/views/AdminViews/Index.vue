@@ -4,6 +4,7 @@
     import { ref, computed } from 'vue';
     import { useStore } from 'vuex';
     import axios from '../../axios';
+    import '../../styles/styles.css';
     
     const store = useStore();
     const drawerVisible = ref(false);

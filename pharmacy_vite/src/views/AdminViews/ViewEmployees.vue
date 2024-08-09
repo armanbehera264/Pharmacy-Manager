@@ -3,6 +3,7 @@
     import { useStore } from 'vuex';
     import axios from '../../axios';
     import { useToast } from 'primevue/usetoast';
+    import '../../styles/styles.css';
 
     const deletionDialog = ref();
     const data = ref([]);

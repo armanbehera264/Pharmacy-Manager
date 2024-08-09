@@ -4,6 +4,8 @@ from administrator.models import User
 from administrator.serializers import UserSerializer
 from administrator import services, authentication
 from doctor.serializers import DoctorSerializer
+from pharmacy.models import Medicines, Allergies, SideEffects, Ingredients, Categories
+from pharmacy.serializers import MedicinesSerializer, AllergiesSerializer, CategoriesSerializer, IngredientsSerializer, SideEffectsSerializer
 
 class SignIn(views.APIView):
     '''
@@ -21,7 +23,6 @@ class SignIn(views.APIView):
         if serializer.is_valid():
             user = serializer.save()
             if user.is_verified == False or user.is_superuser == False:
-                user.delete()
                 return exceptions.AuthenticationFailed("Sign In user details must be of a admin.")
             
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -135,6 +136,110 @@ class ViewEmployees(views.APIView):
             return exceptions.NotAcceptable('Failed to delete users.')
             
         return response.Response('Users successfully deleted from system.')
+
+
+class ViewMedicines(views.APIView):
+    '''
+        When it's a get request, this API returns all the medicines available
+        When it's a post request, this API allows to edit the medicine
+    '''
+    
+    authentication_classes = (authentication.CustomUserAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, )
+    
+    def get(self, request):
+        
+        medicines = Medicines.objects.all()
+        
+        resp = []
+        
+        for medicine in medicines:
+            medicine_serialized = MedicinesSerializer(medicine)
+            resp.append(medicine_serialized)
+        
+        return response.Response(resp)
+    
+    def post(self, request):
+        
+        return response.Response("API endpoint not implemented yet.")
+    
+
+class AddMedicines(views.APIView):
+    '''
+        Add Medicines endpoint
+    '''
+    
+    authentication_classes = (authentication.CustomUserAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, )
+    
+    def get(self, request):
+        allergies = Allergies.objects.all()
+        ingredients = Ingredients.objects.all()
+        sideEffects = SideEffects.objects.all()
+        categories = Categories.objects.all()
+        
+        resp = {
+            'allergies': [],
+            'ingredients': [],
+            'sideEffects': [],
+            'categories': []
+        }
+        
+        for allergy in allergies:
+            serialized = AllergiesSerializer(allergy)
+            resp['allergy'].append(serialized.data)  # Use .data to get JSON serializable data
+            
+        for ingredient in ingredients:
+            serialized = IngredientsSerializer(ingredient)
+            resp['ingredients'].append(serialized.data)  # Use .data to get JSON serializable data
+            
+        for sideEffect in sideEffects:
+            serialized = SideEffectsSerializer(sideEffect)  # Add 'Serializer' to the class name
+            resp['sideEffects'].append(serialized.data)  # Use .data to get JSON serializable data
+            
+        for category in categories:
+            serialized = CategoriesSerializer(category)
+            resp['categories'].append(serialized.data)  # Use .data to get JSON serializable data
+            
+        return response.Response(resp)
+
+
+    def post(self, request):
+        
+        ingredients_data = request.data.pop('ingredients', [])
+        categories_data = request.data.pop('categories', [])
+        sideEffects_data = request.data.pop('sideEffects', [])
+        allergies_data = request.data.pop('allergies', [])
+
+        # Create the Medicines object
+        serializer = MedicinesSerializer(data=request.data)
+        
+        if not ingredients_data or not categories_data or not sideEffects_data or not allergies_data:
+            return response.Response("All required fields are not provided.", status=status.HTTP_400_BAD_REQUEST)
+        
+        if serializer.is_valid():
+            medicine = serializer.save()
+
+            for ingredient_data in ingredients_data:
+                ingredient, created = Ingredients.objects.get_or_create(**ingredient_data)
+                medicine.ingredients.add(ingredient)
+            
+            for category_data in categories_data:
+                category, created = Categories.objects.get_or_create(**category_data)
+                medicine.categories.add(category)
+            
+            for sideEffect_data in sideEffects_data:
+                side_effect, created = SideEffects.objects.get_or_create(**sideEffect_data)
+                medicine.sideEffects.add(side_effect)
+                
+            for allergy_data in allergies_data:
+                allergy, created = Allergies.objects.get_or_create(**allergy_data)
+                medicine.allergies.add(allergy)
+
+            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class Logout(views.APIView):
     '''

@@ -2,6 +2,7 @@
     import axios from '../../axios';
     import { useStore } from 'vuex';
     import { ref } from 'vue';
+    import '../../styles/styles.css';
 
     const unverifiedUsersData = ref([]);
     const medicineInventoryData = ref([]);
