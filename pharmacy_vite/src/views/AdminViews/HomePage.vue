@@ -40,7 +40,7 @@
     <div class="container">
         <div class="sub-container">
             <div class="card" style="margin-left: 20px;">
-                <DataTable :value="employeesData" datakey="id" :rows="2" paginator tableStyle="min-width: 22rem">
+                <DataTable :value="employeesData" datakey="id" :rows="3" paginator tableStyle="min-width: 22rem">
                     <Column field="first_name" header="First Name" style="width: 20%" sortable></Column>
                     <Column field="last_name" header="Last Name" style="width: 20%" sortable></Column>
                 </DataTable>
@@ -52,7 +52,7 @@
 
         <div class="sub-container">
             <div class="card" style="margin-left: 20px;">
-                <DataTable :value="unverifiedUsersData" datakey="id" :rows="2" paginator tableStyle="min-width: 22rem" v-if="unverifiedUsersData.length != 0">
+                <DataTable :value="unverifiedUsersData" datakey="id" :rows="3" paginator tableStyle="min-width: 22rem" v-if="unverifiedUsersData.length != 0">
                     <Column field="first_name" header="First Name" style="width: 20%" sortable></Column>
                     <Column field="last_name" header="Last Name" style="width: 20%" sortable></Column>
                 </DataTable>

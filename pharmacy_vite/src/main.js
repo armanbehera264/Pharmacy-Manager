@@ -24,6 +24,8 @@ import Toolbar from 'primevue/toolbar';
 import Dialog from 'primevue/dialog';
 import Row from 'primevue/row';
 import Drawer from 'primevue/drawer';
+import Textarea from 'primevue/textarea';
+import AutoComplete from 'primevue/autocomplete';
 
 // Importing Custom components
 import CustomPassword from './components/CustomPassword.vue';
@@ -61,7 +63,9 @@ app.component('Column', Column);
 app.component('Toolbar', Toolbar);
 app.component('Dialog', Dialog);
 app.component('Row', Row);
-app.component('Drawer', Drawer)
+app.component('Drawer', Drawer);
+app.component('Textarea', Textarea);
+app.component('AutoComplete', AutoComplete);
 
 app.component('CustomPassword', CustomPassword);
 app.component('CustomDrawer', CustomDrawer);

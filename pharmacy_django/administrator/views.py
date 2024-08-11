@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import views, response, status, permissions, exceptions
 from administrator.models import User
 from administrator.serializers import UserSerializer
-from administrator import services, authentication
+from administrator import authentication
 from doctor.serializers import DoctorSerializer
 from pharmacy.models import Medicines, Allergies, SideEffects, Ingredients, Categories
 from pharmacy.serializers import MedicinesSerializer, AllergiesSerializer, CategoriesSerializer, IngredientsSerializer, SideEffectsSerializer
@@ -29,43 +29,6 @@ class SignIn(views.APIView):
         else:
             return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-
-class LogIn(views.APIView):
-    '''
-        APIView for doctor login
-    '''
-    permission_classes = (permissions.AllowAny, )
-    def post(self, request):
-        '''
-            Only post methods are allowed for this endpoint.
-            The data posted is used to login the user
-        '''
-        
-        username = request.data['username']
-        password = request.data['password']
-        
-        user = User.objects.filter(username=username).first()
-        
-        if user is None:
-            raise exceptions.AuthenticationFailed('Invalid Credentials')
-        
-        if not user.check_password(raw_password=password):
-            raise exceptions.AuthenticationFailed('Invalid password.')
-        
-        if user.is_verified == False or user.is_superuser == False:
-                return exceptions.AuthenticationFailed("Sign In user details must be of a admin.")
-        
-        token = services.create_token(user_id=user.id)
-        
-        resp = response.Response()
-        
-        # resp.set_cookie(key="jwt", value=token, httponly=True)
-        
-        resp.data = {"jwt": token}
-        
-        return resp
-        
-
 class VerifyEmployees(views.APIView):
     
     authentication_classes = (authentication.CustomUserAuthentication, )
@@ -187,7 +150,7 @@ class AddMedicines(views.APIView):
         
         for allergy in allergies:
             serialized = AllergiesSerializer(allergy)
-            resp['allergy'].append(serialized.data)  # Use .data to get JSON serializable data
+            resp['allergies'].append(serialized.data)  # Use .data to get JSON serializable data
             
         for ingredient in ingredients:
             serialized = IngredientsSerializer(ingredient)
