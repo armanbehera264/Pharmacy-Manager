@@ -4,6 +4,7 @@
     import { ref } from 'vue';
     import '../../styles/styles.css';
     import axios from '../../axios';
+    import { format } from 'date-fns';
 
     const store = useStore();
     const toast = useToast();
@@ -12,142 +13,202 @@
 
     const ingredientsCount = ref(1);
     const ingredientsData = ref([]);
-    const selectedIngredients = ref(Array(ingredientsCount.value).fill(null));
-    const filteredIngredients = ref();
+    let selectedIngredients = ref([]);
 
     const allergiesCount = ref(1);
     const allergiesData = ref([]);
-    const selectedAllergies = ref([]);
-    const filteredAllergies = ref([]);
+    let selectedAllergies = ref([]);
 
     const categoriesCount = ref(1);
     const categoriesData = ref([]);
-    const selectedCategories = ref([]);
-    const filteredCategories = ref();
+    let selectedCategories = ref([]);
 
     const sideEffectsCount = ref(1);
     const sideEffectsData = ref([]);
-    const selectedSideEffects = ref([]);
-    const filteredSideEffects = ref();
-    
-    const name = ref('');
-    const stock = ref();
-    const price = ref();
-    const manufacturer = ref('');
-    const expiration_date = ref('');
-    const description = ref('');
+    let selectedSideEffects = ref([]);
 
-    if (store.getters.isRegistered){ 
+    const filteredArray = ref();
 
+    let name = ref('');
+    let stock = ref();
+    let price = ref();
+    let manufacturer = ref('');
+    let expiration_date = ref('');
+    let description = ref('');
+
+    if (store.getters.isRegistered) { 
         const usertype = store.getters.getUserDetails['usertype']
         if (usertype === 'administrator' || usertype === 'pharmacy') {
-
             axios.get('/administrator/addMedicines/')
-            .then( (response) => {
+            .then((response) => {
                 allergiesData.value = response.data.allergies
                 ingredientsData.value = response.data.ingredients
                 categoriesData.value = response.data.categories
                 sideEffectsData.value = response.data.sideEffects
-                
             })
-            .catch( (error) => {
-                toast.add({severity:'warn', summary: 'Unsuccessful in getting data from the server.', message: 'Please try again.', life:3000});
+            .catch((error) => {
+                toast.add({ severity:'warn', summary: 'Unsuccessful in getting data from the server.', message: 'Please try again.', life:3000 });
             })
         } else {
             message.value = "Log in using an admin or pharmacist user to access this page."
         }
     }
 
-    const searchIngredients = (event) => {
+    const search = (event, fullArray) => {
         setTimeout(() => {
             if (!event.query.trim().length) {
-                filteredIngredients.value = [...ingredientsData.value]
+                filteredArray.value = [...fullArray]
             } else {
-                filteredIngredients.value = ingredientsData.value.filter((ingredient) => {
-                    return ingredient.name.toLowerCase().startsWith(event.query.toLowerCase());
-                });
-            }
-        }, 50);
-    }
-
-    const search = (event, filteredArray, fullArray) => {
-        setTimeout(() => {
-            if (!event.query.trim().length) {
-                console.log(filteredArray)
-                console.log(fullArray)
-                filteredArray = [...fullArray]
-            } else {
-                filteredArray = fullArray.filter((element) => {
+                filteredArray.value = fullArray.filter((element) => {
                     return element.name.toLowerCase().startsWith(event.query.toLowerCase());
                 });
             }
         }, 50);
     }
 
-    const searchAllergies = (event) => {
-        setTimeout(() => {
-            if (!event.query.trim().length) {
-                filteredAllergies.value = [...allergiesData.value]
-            } else {
-                filteredIngredients.value = allergiesData.value.filter((allergy) => {
-                    return allergy.name.toLowerCase().startsWith(event.query.toLowerCase());
-                });
-            }
-        }, 50);
-    }
-
     const submit = () => {
-        console.log(selectedIngredients.value)
+        const sideEffectsArray = [];
+
+
+        for (let i = 0; i < sideEffectsCount.value; i++) {
+            sideEffectsArray[i] = {
+                "name": selectedSideEffects.value[i].name ? selectedSideEffects.value[i].name : selectedSideEffects.value[i],
+                "usage_priority": (i + 1)
+            };
+        }
+
+        console.log({"name": name.value,
+            "stock": stock.value ? stock.value : 0,
+            "price": price.value ? price.value : 0,
+            "description": description.value,
+            "manufacturer": manufacturer.value,
+            "expiration_date": expiration_date.value ? format(new Date(expiration_date.value), 'dd/MM/yyyy') : '',
+            "ingredients": [...selectedIngredients.value],
+            "allergies": [...selectedAllergies.value],
+            "sideEffects": sideEffectsArray,
+            "categories": [...selectedCategories.value]})
+
+        axios.post('/administrator/addMedicines/', {
+            "name": name.value,
+            "stock": stock.value ? stock.value : 0,
+            "price": price.value ? price.value : 0,
+            "description": description.value,
+            "manufacturer": manufacturer.value,
+            "expiration_date": expiration_date.value ? format(new Date(expiration_date.value), 'dd/MM/yyyy') : '',
+            "ingredients": [...selectedIngredients.value],
+            "allergies": [...selectedAllergies.value],
+            "sideEffects": sideEffectsArray,
+            "categories": [...selectedCategories.value]
+        })
+        .then( (response) => {
+            toast.add({ severity:'success', summary: 'Successfully added medicine', life: 3000 });
+
+            name = ref('')
+            stock= ref()
+            price = ref()
+            description = ref('')
+            manufacturer = ref('')
+            expiration_date = ref('')
+            ingredients = ref('')
+
+            selectedIngredients = ref([])
+            selectedAllergies = ref([])
+            selectedSideEffects = ref([])
+            selectedCategories = ref([])
+        })  
+        .catch( (error) => {
+            toast.add({ severity:'warn', summary: 'Unsuccessful in adding medicine.', message: 'Please try again in some time.', life:3000 });
+        })
     }
 </script>
 
 <template>
-    <Toast/>
+    <Toast />
 
     <div class="centered">
-        <h1 class="text-3xl font-bold m-3"> {{ message }}</h1>
+        <h1 class="text-3xl font-bold m-3">{{ message }}</h1>
     </div>
 
-    <div class="top-container">
-        <div class="container">
-            <div class="sub-container">
-                <InputText class="elements" id="Name" placeholder="Name *" v-model.trim="name"/>
-                <InputNumber class="elements" id="stock" placeholder="Stock *" inputId="withoutgrouping" :useGrouping="false" v-model.number="stock" :min="0" :allowEmpty="true"/>
-            </div>
-            <div class="sub-container">
-                <InputNumber class="elements" id="price" placeholder="Price *" inputId="currency-india" mode="currency" currency="INR" currencyDisplay="code" locale="en-IN" v-model.number="price" :min="0" :allowEmpty="true"/>
-                <InputText class="elements" id="Manufacturer" placeholder="Manufacturer" v-model.trim="manufacturer"/>
-            </div>
-
-            <div class="sub-container">
-                <DatePicker v-model="expiration_date" dateFormat="dd/mm/yy" placeholder="Expiration Date"/>
-            </div>
-
-            <div class="vertical-divide"></div>
-
-            <div class="sub-container mt-4">
+    <div class="container mx-auto p-6 bg-grey shadow-md rounded-lg">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div class="flex flex-col space-y-4">
+                <InputText id="Name" placeholder="Name *" v-model.trim="name" class="p-inputtext-sm w-full" />
+                <InputNumber id="stock" placeholder="Stock *" inputId="withoutgrouping" :useGrouping="false" v-model.number="stock" :min="0" :allowEmpty="true" class="p-inputnumber-sm w-full" />
+                <InputNumber id="price" placeholder="Price *" inputId="currency-india" mode="currency" currency="INR" currencyDisplay="code" locale="en-IN" v-model.number="price" :min="0" :allowEmpty="true" class="p-inputnumber-sm w-full" />
+                <InputText id="Manufacturer" placeholder="Manufacturer" v-model.trim="manufacturer" class="p-inputtext-sm w-full" />
+                <DatePicker v-model="expiration_date" dateFormat="dd/mm/yy" placeholder="Expiration Date" class="p-datepicker-sm w-full" />
                 <FloatLabel>
-                    <Textarea v-model="description" autoResize rows="5" cols="54"/>
+                    <Textarea v-model="description" autoResize rows="5" cols="54" class="w-full" />
                     <label>Description</label>
                 </FloatLabel>
             </div>
-        </div>
 
-        <div class="vertical-divide"></div>
+            <div class="flex flex-col space-y-6">
+                <div class="flex flex-col space-y-4">
+                    <label class="font-semibold">Ingredients</label>
+                    <div v-for="n in ingredientsCount" :key="n" class="flex items-center space-x-4">
+                        <AutoComplete :placeholder="`Ingredient ${n}`" v-model="selectedIngredients[n - 1]" optionLabel="name" dropdown :suggestions="filteredArray" @complete="(event) => search(event, ingredientsData)" class="w-full" />
+                    </div>
+                    <Button label="Add Ingredient" @click.prevent="ingredientsCount += 1" class="p-button-sm" />
+                </div>
 
-        <div class="sub-container">
-            <div class="container" >
-                <div class="sub-container" v-for="n in ingredientsCount" :key="n">
-                    <AutoComplete :placeholder="`Ingredient ${n}`" v-model="selectedIngredients[n]" optionLabel="name" dropdown :suggestions="filteredIngredients" @complete="(event) => search(event, filteredIngredients, ingredientsData)"></AutoComplete>
+                <div class="flex flex-col space-y-4">
+                    <label class="font-semibold">Allergies</label>
+                    <div v-for="n in allergiesCount" :key="n" class="flex items-center space-x-4">
+                        <AutoComplete :placeholder="`Allergy ${n}`" v-model="selectedAllergies[n - 1]" optionLabel="name" dropdown :suggestions="filteredArray" @complete="(event) => search(event, allergiesData)" class="w-full" />
+                    </div>
+                    <Button label="Add Allergy" @click.prevent="allergiesCount += 1" class="p-button-sm" />
                 </div>
-                <Button label="Add Ingredient" @click.prevent="ingredientsCount += 1"/>
-                
-                <div class="sub-container" v-for="n in allergiesCount" :key="n">
-                    <AutoComplete :placeholder="`Allergy ${n}`" v-model="selectedAllergies[n]" optionLabel="name" dropdown :suggestions="filteredAllergies" @complete="searchAllergies"></AutoComplete>
+            </div>
+
+            <div>
+                <div class="flex flex-col space-y-4">
+                    <label class="font-semibold">Categories</label>
+                    <div v-for="n in categoriesCount" :key="n" class="flex items-center space-x-4">
+                        <AutoComplete :placeholder="`Use ${n}`" v-model="selectedCategories[n - 1]" optionLabel="name" dropdown :suggestions="filteredArray" @complete="(event) => search(event, categoriesData)" class="w-full" />
+                    </div>
+                    <Button label="Add Use" @click.prevent="categoriesCount += 1" class="p-button-sm" />
                 </div>
-                <Button label="Add Allergy" @click.prevent="allergiesCount += 1"/>
+
+                <div class="flex flex-col space-y-4">
+                    <label class="font-semibold mt-4">Side Effects</label>
+                    <div v-for="n in sideEffectsCount" :key="n" class="flex items-center space-x-4">
+                        <AutoComplete :placeholder="`Side Effect ${n}`" v-model="selectedSideEffects[n - 1]" optionLabel="name" dropdown :suggestions="filteredArray" @complete="(event) => search(event, sideEffectsData)" class="w-full" />
+                    </div>
+                    <Button label="Add Side Effect" @click.prevent="sideEffectsCount += 1" class="p-button-sm" />
+                </div>    
             </div>
         </div>
+        <div class="flex justify-center mt-4">
+            <Button label="Submit" @click.prevent="submit" class="p-button-lg" />
+        </div>
     </div>
-    <Button label="Submit" @click.prevent="submit"/>
 </template>
+
+<style scoped>
+.container {
+    max-width: 1200px;
+}
+
+.sub-container {
+    margin-bottom: 1rem;
+}
+
+.vertical-divide {
+    margin: 0 1rem;
+}
+
+.flex-col > .sub-container {
+    margin-bottom: 0;
+}
+
+.p-button-sm {
+    width: auto;
+    margin-top: 0.5rem;
+}
+
+.p-button-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+}
+</style>
