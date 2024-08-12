@@ -67,26 +67,14 @@
     }
 
     const submit = () => {
-        const sideEffectsArray = [];
+        const categoriesArray = [];
 
-
-        for (let i = 0; i < sideEffectsCount.value; i++) {
-            sideEffectsArray[i] = {
-                "name": selectedSideEffects.value[i].name ? selectedSideEffects.value[i].name : selectedSideEffects.value[i],
+        for (let i = 0; i < categoriesCount.value; i++) {
+            categoriesArray[i] = {
+                "name": selectedCategories.value[i].name ? selectedCategories.value[i].name : selectedCategories.value[i],
                 "usage_priority": (i + 1)
             };
         }
-
-        console.log({"name": name.value,
-            "stock": stock.value ? stock.value : 0,
-            "price": price.value ? price.value : 0,
-            "description": description.value,
-            "manufacturer": manufacturer.value,
-            "expiration_date": expiration_date.value ? format(new Date(expiration_date.value), 'dd/MM/yyyy') : '',
-            "ingredients": [...selectedIngredients.value],
-            "allergies": [...selectedAllergies.value],
-            "sideEffects": sideEffectsArray,
-            "categories": [...selectedCategories.value]})
 
         axios.post('/administrator/addMedicines/', {
             "name": name.value,
@@ -94,27 +82,19 @@
             "price": price.value ? price.value : 0,
             "description": description.value,
             "manufacturer": manufacturer.value,
-            "expiration_date": expiration_date.value ? format(new Date(expiration_date.value), 'dd/MM/yyyy') : '',
-            "ingredients": [...selectedIngredients.value],
-            "allergies": [...selectedAllergies.value],
-            "sideEffects": sideEffectsArray,
-            "categories": [...selectedCategories.value]
+            "expiration_date": expiration_date.value ? format(new Date(expiration_date.value), 'yyyy-MM-dd') : '',
+            "ingredients": selectedIngredients.value.map(ingredient => ({ name: ingredient })),
+            "allergies": selectedAllergies.value.map(allergy => ({ name: allergy })),
+            "sideEffects": selectedSideEffects.value.map(sideEffect => ({ name : sideEffect })),
+            "categories": categoriesArray
         })
         .then( (response) => {
-            toast.add({ severity:'success', summary: 'Successfully added medicine', life: 3000 });
-
-            name = ref('')
-            stock= ref()
-            price = ref()
-            description = ref('')
-            manufacturer = ref('')
-            expiration_date = ref('')
-            ingredients = ref('')
-
-            selectedIngredients = ref([])
-            selectedAllergies = ref([])
-            selectedSideEffects = ref([])
-            selectedCategories = ref([])
+            toast.add({ severity:'success', summary: 'Successfully added medicine', life: 2000 });
+            
+            // Reload the page
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         })  
         .catch( (error) => {
             toast.add({ severity:'warn', summary: 'Unsuccessful in adding medicine.', message: 'Please try again in some time.', life:3000 });
@@ -129,6 +109,10 @@
         <h1 class="text-3xl font-bold m-3">{{ message }}</h1>
     </div>
 
+    <div class="centered" v-if="!message">
+        <h1 class="text-3xl font-bld m-3">Add Medicines</h1>
+    </div>
+
     <div class="container mx-auto p-6 bg-grey shadow-md rounded-lg">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div class="flex flex-col space-y-4">
@@ -137,7 +121,7 @@
                 <InputNumber id="price" placeholder="Price *" inputId="currency-india" mode="currency" currency="INR" currencyDisplay="code" locale="en-IN" v-model.number="price" :min="0" :allowEmpty="true" class="p-inputnumber-sm w-full" />
                 <InputText id="Manufacturer" placeholder="Manufacturer" v-model.trim="manufacturer" class="p-inputtext-sm w-full" />
                 <DatePicker v-model="expiration_date" dateFormat="dd/mm/yy" placeholder="Expiration Date" class="p-datepicker-sm w-full" />
-                <FloatLabel>
+                <FloatLabel class="mt-4">
                     <Textarea v-model="description" autoResize rows="5" cols="54" class="w-full" />
                     <label>Description</label>
                 </FloatLabel>

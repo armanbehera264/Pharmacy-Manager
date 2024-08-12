@@ -8,7 +8,6 @@
     const deletionDialog = ref();
     const data = ref([]);
     const selected = ref();
-    const length = ref(-1);
     const message = ref();
     const toast = useToast();
 
@@ -19,7 +18,6 @@
         axios.get('/administrator/viewEmployees/')
         .then( (response) => {
             data.value = response.data
-            length.value = data.value.length
         })
         .catch( (error) => {
             console.log(error)
@@ -63,7 +61,7 @@
         <h1 class="text-3xl font-bold m-3"> {{ message }}</h1>
     </div>
 
-    <div class="top-container" v-if="length >= 0">
+    <div class="top-container" v-if="data.length >= 0">
         <div class="container">
             <div class="centered">
                 <h1 class="text-3xl font-bold m-3">All Employees</h1>    
@@ -82,14 +80,18 @@
                 </div>
             </div>
 
-            <div class="centered" v-if="length == 0">
+            <div class="centered" v-if="data.length == 0">
                 <h1 class="text-l font-bold m-2">There are no users in the system.</h1>
             </div>
 
-            <div class="sub-container" v-if="length > 0"> 
+            <div class="sub-container" v-if="data.length > 0"> 
                 <Button label="Delete" icon="pi pi-trash" severity="danger" @click="confirmDeletion" style="margin-left: 30rem; margin-top: 3rem;"  :disabled="!selected || !selected.length"/>
             </div>
         </div>
+    </div>
+
+    <div v-else>
+        <h1 class="text-3xl font-bold m-3">There are no employees in the system.</h1>
     </div>
 
     <Dialog v-model:visible="deletionDialog" :style="{ width: '450px' }" header="Confirm">

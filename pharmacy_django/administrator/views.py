@@ -107,8 +107,8 @@ class ViewMedicines(views.APIView):
         When it's a post request, this API allows to edit the medicine
     '''
     
-    authentication_classes = (authentication.CustomUserAuthentication, )
-    permission_classes = (permissions.IsAuthenticated, )
+    #authentication_classes = (authentication.CustomUserAuthentication, )
+    #permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):
         
@@ -118,13 +118,22 @@ class ViewMedicines(views.APIView):
         
         for medicine in medicines:
             medicine_serialized = MedicinesSerializer(medicine)
-            resp.append(medicine_serialized)
+            resp.append(medicine_serialized.data)
         
         return response.Response(resp)
     
     def post(self, request):
         
-        return response.Response("API endpoint not implemented yet.")
+        ids = request.data['ids']
+        
+        try:
+            for id in ids:
+                medicine = Medicines.objects.get(id=id)
+                medicine.delete()
+        except:
+            return exceptions.NotAcceptable('Failed to delete medicine(s).')
+            
+        return response.Response('Medicines successfully deleted from system.')
     
 
 class AddMedicines(views.APIView):
