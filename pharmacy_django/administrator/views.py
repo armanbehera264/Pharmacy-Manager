@@ -107,8 +107,8 @@ class ViewMedicines(views.APIView):
         When it's a post request, this API allows to edit the medicine
     '''
     
-    authentication_classes = (authentication.CustomUserAuthentication, )
-    permission_classes = (permissions.IsAuthenticated, )
+    #authentication_classes = (authentication.CustomUserAuthentication, )
+    #permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):
         

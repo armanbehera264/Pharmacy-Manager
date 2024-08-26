@@ -22,6 +22,7 @@
         .then( (response) => {
             data.value = response.data
             length.value = data.value.length
+            console.log(data.value)
         })
         .catch( (error) => {
             message.value = "Log in using an admin account to access this page."
