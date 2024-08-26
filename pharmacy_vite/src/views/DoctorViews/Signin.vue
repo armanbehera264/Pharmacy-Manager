@@ -144,7 +144,7 @@
 <template>
     <div class="flex align-items-center justify-content-center">
         <Toast/>
-        <h1>Sign In</h1>
+        <h1 class="text-3xl font-bold m-3">Sign In</h1>
     </div>
 
     <div class="top-container">
@@ -160,7 +160,7 @@
             </div>
 
             <div class="sub-container">
-                <InputText class="elements" id="email-id" placeholder="Email Id*" v-model.trim="email"/>
+                <InputText class="elements" id="email-id" placeholder="Email ID*" v-model.trim="email"/>
             </div>
             <div class="sub-container">
                 <CustomPassword class="elements" placeholder="Password*" v-model.trim="password"/>

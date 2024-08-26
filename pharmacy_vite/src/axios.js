@@ -26,7 +26,6 @@ const refreshAccessToken = async () => {
         localStorage.setItem('accessToken', accessToken);
         return accessToken;
     } catch (error) {
-        console.log(`Refresh token error: ${error}`);
         return null; // The refresh token is invalid or expired.
     }
 }
@@ -53,20 +52,16 @@ instance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config
 
-        console.log(`Error: ${error.response.status}`)
-
         if (error.response.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
             const newAccessToken = await refreshAccessToken();
-            console.log(`Access Token: ${newAccessToken}`)
             if (newAccessToken) {
                 originalRequest.headers['Authorization'] = `JWT ${newAccessToken}`;
                 return instance(originalRequest);
             }
         }
 
-        if (error.response.status === 401) {
-            console.error(error)
+        else if (error.response.status === 401) {
             const usertype = localStorage.getItem('usertype')
             router.push(`/${usertype}/login`)
         }

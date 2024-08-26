@@ -15,16 +15,15 @@
     const message = ref();
     const data = ref([]);
     const length = ref(-1);
+    const editingRows = ref([]);
 
     if (store.getters.isRegistered === true) {
         axios.get('/administrator/viewMedicines/')
         .then( (response) => {
             data.value = response.data
             length.value = data.value.length
-            console.log(data.value)
         })
         .catch( (error) => {
-            console.log(error)
             message.value = "Log in using an admin account to access this page."
         })
     }
@@ -35,6 +34,15 @@
     const confirmDeletion = () => {      
         deletionDialog.value = true;
     }
+
+    const onRowEditSave = (event) => {
+        let { newData, index } = event;
+
+        data.value[index] = newData;
+
+        console.log(newData)
+    };
+
 
     const sendRequest = () => {
         deletionDialog.value = false;
@@ -51,10 +59,10 @@
             data.value = data.value.filter(val => !selected.value.includes(val));
             selected.value = null;
 
-            toast.add({severity:'success', summary: 'Successfully deleted users!', life: 3000});
+            toast.add({severity:'success', summary: 'Successfully deleted medicines!', life: 3000});
         })
         .catch( (error) => {
-            toast.add({severity:'warn', summary: 'Unsuccesful in deleting users.', message: 'Please try again.', life:3000});
+            toast.add({severity:'warn', summary: 'Unsuccesful in deleting medicines.', message: 'Please try again.', life:3000});
         })
     }
 </script>
@@ -74,13 +82,49 @@
 
             <div class="sub-container" style="margin-left:7rem;" v-if="data.length != 0">
                 <div class="card">
-                    <DataTable :value="data" v-model:selection="selected" datakey="id" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
+                    <DataTable v-model:editingRows="editingRows" v-model:selection="selected" :value="data" editMode="row" dataKey="id" @row-edit-save="onRowEditSave" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
+                        :pt="{
+                            table: { style: 'min-width: 50rem' },
+                            column: {
+                                bodycell: ({ state }) => ({
+                                    style:  state['d_editing']&&'padding-top: 0.75rem; padding-bottom: 0.75rem'
+                                })
+                            }
+                        }"
+                    >
                         <Column selectionMode="multiple" style="width: 3rem"></Column>
-                        <Column field="name" header="Name" style="width: 20%" sortable></Column>
-                        <Column field="stock" header="Stock" style="width: 20%" sortable></Column>
-                        <Column field="price" header="Price" style="width: 20%" sortable></Column>
-                        <Column field="manufacturer" header="Manufacturer" style="width:20%" sortable></Column>
-                        <Column field="expiration_date" header="Expiration Date" style="width: 20%" sortable></Column>
+
+                        <Column field="name" header="Name" style="width: 20%">
+                            <template #editor="{ data, field }">
+                                <InputText v-model="data[field]" fluid />
+                            </template>
+                        </Column>
+
+                        <Column field="stock" header="Stock" style="width: 20%">
+                            <template #editor="{ data, field }">
+                                <InputText v-model="data[field]" fluid />
+                            </template>
+                        </Column>
+
+                        <Column field="price" header="Price" style="width: 20%">
+                            <template #editor="{ data, field }">
+                                <InputText v-model="data[field]" fluid />
+                            </template>
+                        </Column>
+                        
+                        <Column field="manufacturer" header="Manufacturer" style="width: 20%">
+                            <template #editor="{ data, field }">
+                                <InputText v-model="data[field]" fluid />
+                            </template>
+                        </Column>
+
+                        <Column field="expiration_date" header="Expiration Date" style="width: 20%">
+                            <template #editor="{ data, field }">
+                                <InputText v-model="data[field]" fluid />
+                            </template>
+                        </Column>
+
+                        <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
                     </DataTable>
                 </div>
             </div>

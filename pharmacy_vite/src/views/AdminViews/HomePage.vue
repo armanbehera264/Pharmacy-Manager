@@ -11,8 +11,6 @@
     const store = useStore();
     store.dispatch('initializeStore');
 
-    const expandedRows = ref();
-
     if (store.getters.isRegistered) {
 
         axios.get('administrator/verifyEmployees/')
@@ -94,7 +92,7 @@
                     </div>
 
                     <div class="centered">
-                        <Button label="View or Edit Medicines" icon="pi pi-external-link"  iconPos="right" @click="$router.push({ name: 'ViewMedicines' })" style="margin: 0.5rem"/>
+                        <Button label="View or Add Medicines" icon="pi pi-external-link"  iconPos="right" @click="$router.push({ name: 'ViewMedicines' })" style="margin: 0.5rem"/>
                     </div>
                 </div>
             </div>

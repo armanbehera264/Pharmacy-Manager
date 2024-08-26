@@ -93,8 +93,8 @@ class User(AbstractUser):
     '''
     username = models.CharField(max_length=100, unique=True, blank=False)
     email = models.EmailField(max_length=150, blank=True)
-    first_name = models.CharField(max_length=50, blank=False)
-    last_name = models.CharField(max_length=50, blank=False)
+    first_name = models.CharField(max_length=100, blank=False)
+    last_name = models.CharField(max_length=100, blank=True)
     age = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(150)], blank=False)
     
     genderChoices = (

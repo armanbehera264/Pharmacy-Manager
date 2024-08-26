@@ -106,7 +106,7 @@
     
     <div class="flex align-items-center justify-content-center">
         <Toast/>
-        <h1>Login</h1>
+        <h1 class="text-3xl font-bold m-3">Login</h1>
     </div>
 
     <div class="top-container">

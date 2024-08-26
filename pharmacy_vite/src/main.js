@@ -29,7 +29,6 @@ import AutoComplete from 'primevue/autocomplete';
 
 // Importing Custom components
 import CustomPassword from './components/CustomPassword.vue';
-import CustomDrawer from './components/CustomDrawer.vue';
 
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
@@ -68,7 +67,6 @@ app.component('Textarea', Textarea);
 app.component('AutoComplete', AutoComplete);
 
 app.component('CustomPassword', CustomPassword);
-app.component('CustomDrawer', CustomDrawer);
 
 app.use(store);
 app.use(router);

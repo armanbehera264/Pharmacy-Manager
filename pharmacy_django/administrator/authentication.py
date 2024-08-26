@@ -9,7 +9,6 @@ class CustomUserAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         
         JWT_authenticator = JWTAuthentication()
-        # token = request.META.get('HTTP_AUTHORIZATION', None)
         
         # Checks the request for validity
         response = JWT_authenticator.authenticate(request)
@@ -28,7 +27,6 @@ class CustomDoctorAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         
         JWT_authenticator = JWTAuthentication()
-        # token = request.META.get('HTTP_AUTHORIZATION', None)
         
         # Checks the request for validity
         response = JWT_authenticator.authenticate(request)

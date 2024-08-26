@@ -130,7 +130,7 @@
                                     <a 
                                         v-ripple 
                                         class="flex items-center cursor-pointer p-4"
-                                         @click="redirect('ViewEmployees')"
+                                         @click="redirect('ViewMedicines')"
                                     >
                                         
                                         <i class="pi pi-eye mr-4"></i>
@@ -141,7 +141,7 @@
                                     <a 
                                         v-ripple 
                                         class="flex items-center cursor-pointer p-4"
-                                        @click="redirect('VerifyEmployees')"
+                                        @click="redirect('AddMedicines')"
                                     >
                                         <i class="pi pi-plus mr-4"></i>
                                         <span class="font-medium">Add Medcines Inventory</span>

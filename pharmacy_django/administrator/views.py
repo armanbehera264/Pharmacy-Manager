@@ -9,7 +9,7 @@ from pharmacy.serializers import MedicinesSerializer, AllergiesSerializer, Categ
 
 class SignIn(views.APIView):
     '''
-        API view for doctor signin
+        API view for administrator signin
     '''
     permission_classes = (permissions.AllowAny, )
     def post(self, request):
