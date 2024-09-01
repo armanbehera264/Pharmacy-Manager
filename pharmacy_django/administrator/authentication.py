@@ -41,3 +41,69 @@ class CustomDoctorAuthentication(authentication.BaseAuthentication):
             raise exceptions.PermissionDenied("Unauthorized.")
         
         return (user, None)
+
+
+class CustomAdminAuthentication(authentication.BaseAuthentication):
+    
+    def authenticate(self, request):
+        
+        JWT_authenticator = JWTAuthentication()
+        
+        # Checks the request for validity
+        response = JWT_authenticator.authenticate(request)
+        
+        if response is not None:
+            # unpacking
+            user, token = response
+        else:
+            raise exceptions.AuthenticationFailed('Invalid Access Token.')
+        
+        if user.role != 'Admin':
+            raise exceptions.PermissionDenied("Unauthorized.")
+        
+        if user.is_superuser == False:
+            raise exceptions.PermissionDenied('Unauthorized.')
+        
+        return (user, None)
+    
+
+class CustomPharmacyAuthentication(authentication.BaseAuthentication):
+    
+    def authenticate(self, request):
+        
+        JWT_authenticator = JWTAuthentication()
+        
+        # Checks the request for validity
+        response = JWT_authenticator.authenticate(request)
+        
+        if response is not None:
+            # unpacking
+            user, token = response
+        else:
+            raise exceptions.AuthenticationFailed('Invalid Access Token.')
+        
+        if user.role != 'Pharmacy':
+            raise exceptions.PermissionDenied("Unauthorized.")
+        
+        return (user, None)
+    
+    
+class CustomFrontDeskAuthentication(authentication.BaseAuthentication):
+    
+    def authenticate(self, request):
+        
+        JWT_authenticator = JWTAuthentication()
+        
+        # Checks the request for validity
+        response = JWT_authenticator.authenticate(request)
+        
+        if response is not None:
+            # unpacking
+            user, token = response
+        else:
+            raise exceptions.AuthenticationFailed('Invalid Access Token.')
+        
+        if user.role != 'FrontDesk':
+            raise exceptions.PermissionDenied("Unauthorized.")
+        
+        return (user, None)

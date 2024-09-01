@@ -29,12 +29,12 @@
 
     const filteredArray = ref();
 
-    let name = ref('');
-    let stock = ref();
-    let price = ref();
-    let manufacturer = ref('');
-    let expiration_date = ref('');
-    let description = ref('');
+    const name = ref('');
+    const stock = ref();
+    const price = ref();
+    const manufacturer = ref('');
+    const expiration_date = ref('');
+    const description = ref('');
 
     if (store.getters.isRegistered) { 
         const usertype = store.getters.getUserDetails['usertype']
@@ -50,7 +50,7 @@
                 toast.add({ severity:'warn', summary: 'Unsuccessful in getting data from the server.', message: 'Please try again.', life:3000 });
             })
         } else {
-            message.value = "Log in using an admin or pharmacist user to access this page."
+            message.value = "Log in using an admin or pharmacist account to access this page."
         }
     }
 

@@ -10,6 +10,8 @@
     const store = useStore();
     store.dispatch('initializeStore');
 
+    const usertype = store.getters.getUserDetails['usertype']
+
     const deletionDialog = ref();
     const selected = ref()
     const message = ref();
@@ -18,7 +20,7 @@
     const editingRows = ref([]);
 
     if (store.getters.isRegistered === true) {
-        axios.get('/administrator/viewMedicines/')
+        axios.get(`/${usertype}/viewMedicines/`)
         .then( (response) => {
             data.value = response.data
             length.value = data.value.length
@@ -41,7 +43,15 @@
 
         data.value[index] = newData;
 
-        console.log(newData)
+        axios.post('/administrator/viewMedicines/', {
+             "id": newData.id,
+             "name": newData.name,
+             "manufacturer": newData.manufacturer,
+             "expiration_date": newData.expiration_date,
+             "price": newData.price,
+             "stock": newData.stock,
+             "description": newData.description
+        });
     };
 
 
@@ -81,51 +91,58 @@
                 <h1 class="text-3xl font-bold m-3">View Medicines</h1>    
             </div>
 
-            <div class="sub-container" style="margin-left:7rem;" v-if="data.length != 0">
+            <div class="sub-container" v-if="data.length != 0">
                 <div class="card">
-                    <DataTable v-model:editingRows="editingRows" v-model:selection="selected" :value="data" editMode="row" dataKey="id" @row-edit-save="onRowEditSave" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
+                    <DataTable v-model:editingRows="editingRows" v-model:selection="selected" :value="data" editMode="row" dataKey="id" @row-edit-save="onRowEditSave" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]"
+                        tableStyle="min-width: 50rem" class="p-datatable-sm"
                         :pt="{
                             table: { style: 'min-width: 50rem' },
                             column: {
                                 bodycell: ({ state }) => ({
-                                    style:  state['d_editing']&&'padding-top: 0.75rem; padding-bottom: 0.75rem'
+                                    style:  state['d_editing'] && 'padding-top: 0.75rem; padding-bottom: 0.75rem'
                                 })
                             }
                         }"
                     >
-                        <Column selectionMode="multiple" style="width: 3rem"></Column>
+                        <Column selectionMode="multiple" style="width: 5rem"></Column>
 
-                        <Column field="name" header="Name" style="width: 20%">
+                        <Column field="name" header="Name">
                             <template #editor="{ data, field }">
-                                <InputText v-model="data[field]" fluid />
+                                <InputText v-model="data[field]" class="w-full p-inputtext-sm" />
                             </template>
                         </Column>
 
-                        <Column field="stock" header="Stock" style="width: 20%">
+                        <Column field="stock" header="Stock">
                             <template #editor="{ data, field }">
-                                <InputText v-model="data[field]" fluid />
+                                <InputNumber v-model.number="data[field]" :min="0" disabled class="w-full p-inputnumber-sm" />
                             </template>
                         </Column>
 
-                        <Column field="price" header="Price" style="width: 20%">
+                        <Column field="price" header="Price">
                             <template #editor="{ data, field }">
-                                <InputText v-model="data[field]" fluid />
+                                <InputNumber v-model.number="data[field]" :min="0" class="w-full p-inputnumber-sm" />
                             </template>
                         </Column>
                         
-                        <Column field="manufacturer" header="Manufacturer" style="width: 20%">
+                        <Column field="manufacturer" header="Manufacturer">
                             <template #editor="{ data, field }">
-                                <InputText v-model="data[field]" fluid />
+                                <InputText v-model="data[field]" class="w-full p-inputtext-sm" />
                             </template>
                         </Column>
 
-                        <Column field="expiration_date" header="Expiration Date" style="width: 20%">
+                        <Column field="expiration_date" header="Expiration Date">
                             <template #editor="{ data, field }">
-                                <InputText v-model="data[field]" fluid />
+                                <DatePicker v-model="data[field]" dateFormat="dd/mm/yy" disabled placeholder="Expiration Date" class="p-datepicker-sm w-full" />
                             </template>
                         </Column>
 
-                        <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
+                        <Column field="description" header="Description">
+                            <template #editor="{ data, field }">
+                                <InputText v-model="data[field]" class="w-full p-inputtext-sm" :style="{ minWidth: '20rem' }"/>
+                            </template>
+                        </Column>
+
+                        <Column :rowEditor="true" :style="{ minWidth: '8rem' }" bodyStyle="text-align:center"></Column>
                     </DataTable>
                 </div>
             </div>
@@ -143,13 +160,13 @@
     </div>
 
     <div v-else>
-        <h1 class="text-3xl font-bold m-3">There are no employees in the system.</h1>
+        <h1 class="text-3xl font-bold m-3">There are no medicines registered in the system.</h1>
     </div>
 
     <Dialog v-model:visible="deletionDialog" :style="{ width: '450px' }" header="Confirm">
         <div class="flex items-center gap-4">
             <i class="pi pi-exclamation-triangle !text-3xl" />
-            <span>Are you sure you want to delete the selected users?</span>
+            <span>Are you sure you want to delete the selected medicines?</span>
         </div>
         <template #footer>
             <Button label="No" icon="pi pi-times" text @click="deletionDialog = false"/>

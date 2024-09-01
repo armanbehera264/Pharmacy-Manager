@@ -42,8 +42,7 @@ app.use(PrimeVue, {
             prefix: 'p',
             darkModeSelector: 'system',
             cssLayer: false
-         },
-         ripple: true
+         }
     }
 });
 

@@ -64,3 +64,11 @@ class Medicines(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name_plural = "Medicines"
+        
+
+class LabTests(models.Model):
+    
+    name = models.CharField(max_length=255, verbose_name="Test Name")
+    description = models.TextField(verbose_name="Test Description", blank=True, null=True)
+    test_cost = models.FloatField(verbose_name="Test cost")
+    

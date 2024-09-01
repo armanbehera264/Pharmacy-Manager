@@ -94,7 +94,6 @@
                             <ul v-show="dropdownOpenEmployees" class="list-none py-0 pl-4 pr-0 m-0 overflow-y-hidden transition-all duration-[400ms] ease-in-out">
                                 <li> 
                                     <a 
-                                        v-ripple 
                                         class="flex items-center cursor-pointer p-4"
                                          @click="redirect('ViewEmployees')"
                                     >
@@ -104,8 +103,7 @@
                                     </a>
                                 </li>
                                 <li> 
-                                    <a 
-                                        v-ripple 
+                                    <a
                                         class="flex items-center cursor-pointer p-4"
                                         @click="redirect('VerifyEmployees')"
                                     >
@@ -128,7 +126,6 @@
                             <ul v-show="dropdownOpenMedicines" class="list-none py-0 pl-4 pr-0 m-0 overflow-y-hidden transition-all duration-[400ms] ease-in-out">
                                 <li> 
                                     <a 
-                                        v-ripple 
                                         class="flex items-center cursor-pointer p-4"
                                          @click="redirect('ViewMedicines')"
                                     >
@@ -139,7 +136,6 @@
                                 </li>
                                 <li> 
                                     <a 
-                                        v-ripple 
                                         class="flex items-center cursor-pointer p-4"
                                         @click="redirect('AddMedicines')"
                                     >

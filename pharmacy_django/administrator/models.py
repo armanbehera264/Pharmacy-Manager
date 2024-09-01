@@ -7,7 +7,7 @@ class UserManager(BaseUserManager):
         Manager for base user
     '''
     
-    def create_user(self, username: str, age: int, gender: str, primary_phone_number: str,  role: str, is_verified: bool, occupation: str, first_name: str, last_name: str, email: models.EmailField = '', password: str = '', secondary_phone_number: str = '', is_staff: bool = False, is_active: bool = True, is_superuser: bool = False):
+    def create_user(self, username: str, age: int, gender: str, primary_phone_number: str,  role: str, is_verified: bool, first_name: str, last_name: str, email: models.EmailField = '', password: str = '', secondary_phone_number: str = '', is_staff: bool = False, is_active: bool = True, is_superuser: bool = False):
         '''
             Create user method for the manager
         '''
@@ -22,8 +22,6 @@ class UserManager(BaseUserManager):
             raise ValueError("Primary Phone Number of the user must be provided.")
         if not role:
             raise ValueError("Role of the user must be provided.")
-        if not occupation:
-            raise ValueError("Occupation of the user must be provided.")
         if not first_name:
             raise ValueError("First name of the user must be provided.")
         if not last_name:
@@ -48,7 +46,6 @@ class UserManager(BaseUserManager):
             primary_phone_number = primary_phone_number,
             role = role,
             is_verified = is_verified,
-            occupation = occupation,
             email = email,
             first_name = first_name,
             last_name = last_name
@@ -62,7 +59,7 @@ class UserManager(BaseUserManager):
         
         return user
     
-    def create_superuser(self, username: str, age: int, gender: str, primary_phone_number: str,  role: str, occupation: str, first_name: str, last_name: str, email: models.EmailField = '', password: str = '', secondary_phone_number: str = ''):
+    def create_superuser(self, username: str, age: int, gender: str, primary_phone_number: str,  role: str, first_name: str, last_name: str, email: models.EmailField = '', password: str = '', secondary_phone_number: str = ''):
         user = self.create_user(
             username=username,
             age=age,
@@ -70,7 +67,6 @@ class UserManager(BaseUserManager):
             primary_phone_number=primary_phone_number,
             role=role,
             is_verified=True,
-            occupation=occupation,
             first_name=first_name,
             last_name=last_name,
             email=email,
@@ -110,13 +106,13 @@ class User(AbstractUser):
     roleChoices = (
         ('Admin', 'Admin'),
         ('Doctor', 'Doctor'),
-        ('Employee', 'Employee'),
+        ('Pharmacy', 'Pharmacy'),
+        ('FrontDesk', 'FrontDesk'),
         ('Patient', 'Patient')
     )
-    role = models.CharField(choices=roleChoices, max_length=8, blank=False)
+    role = models.CharField(choices=roleChoices, max_length=9, blank=False)
     
     is_verified = models.BooleanField(default=False, blank=False)
-    occupation = models.CharField(max_length=50, blank=False)
     
     objects = UserManager()
     

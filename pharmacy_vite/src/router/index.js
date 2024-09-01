@@ -15,6 +15,7 @@ import VerifyEmployees from '../views/AdminViews/VerifyEmployees.vue'
 import ViewEmployees from '../views/AdminViews/ViewEmployees.vue'
 import ViewMedicines from '../views/AdminViews/ViewMedicines.vue'
 import AddMedicines from '../views/AdminViews/AddMedicines.vue'
+import EditMedicines from '../views/AdminViews/EditMedicines.vue'
 
 const routes = [
   {
@@ -81,6 +82,11 @@ const routes = [
         path: 'AddMedicines',
         name: 'AddMedicines',
         component: AddMedicines
+      },
+      {
+        path: 'EditMedicines',
+        name: 'EditMedicines',
+        component: EditMedicines
       }
     ]
   }

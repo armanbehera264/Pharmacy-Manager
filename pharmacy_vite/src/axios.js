@@ -41,6 +41,7 @@ instance.interceptors.request.use(
         return config
     },
     (error) => {
+        console.log(`Request Error: ${error}`)
         return Promise.reject(error)
     }
 )
@@ -51,6 +52,8 @@ instance.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config
+
+        console.log(`Response Error: ${error}`)
 
         if (error.response.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;

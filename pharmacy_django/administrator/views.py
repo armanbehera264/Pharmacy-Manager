@@ -31,7 +31,7 @@ class SignIn(views.APIView):
         
 class VerifyEmployees(views.APIView):
     
-    authentication_classes = (authentication.CustomUserAuthentication, )
+    authentication_classes = (authentication.CustomAdminAuthentication, )
     permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):
@@ -72,12 +72,12 @@ class VerifyEmployees(views.APIView):
         
 
 class ViewEmployees(views.APIView):
-    authentication_classes = (authentication.CustomUserAuthentication, )
+    authentication_classes = (authentication.CustomAdminAuthentication, )
     permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):
         
-        users = User.objects.all()
+        users = User.objects.exclude(is_superuser=True)
         
         resp = []
         
@@ -107,8 +107,8 @@ class ViewMedicines(views.APIView):
         When it's a post request, this API allows to edit the medicine
     '''
     
-    #authentication_classes = (authentication.CustomUserAuthentication, )
-    #permission_classes = (permissions.IsAuthenticated, )
+    authentication_classes = (authentication.CustomUserAuthentication, )
+    permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):
         
@@ -124,16 +124,27 @@ class ViewMedicines(views.APIView):
     
     def post(self, request):
         
-        ids = request.data['ids']
-        
         try:
-            for id in ids:
-                medicine = Medicines.objects.get(id=id)
-                medicine.delete()
-        except:
-            return exceptions.NotAcceptable('Failed to delete medicine(s).')
+            id = request.data['id']
             
-        return response.Response('Medicines successfully deleted from system.')
+            medicine = Medicines.objects.get(id=id)
+            
+            medicine.name = request.data.get('name', medicine.name)
+            medicine.stock = request.data.get('stock', medicine.stock)
+            medicine.expiration_date = request.data.get('expiration_date', medicine.expiration_date)
+            medicine.price = request.data.get('price', medicine.price)
+            medicine.manufacturer = request.data.get('manufacturer', medicine.manufacturer)
+            medicine.description = request.data.get('description', medicine.description)
+            
+            medicine.save()
+            
+            return response.Response({"message": "Medicine updated successfully."}, status=status.HTTP_200_OK)
+            
+        except Medicines.DoesNotExist:
+            return response.Response({"error": "Medicine not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)
     
 
 class AddMedicines(views.APIView):
@@ -141,7 +152,7 @@ class AddMedicines(views.APIView):
         Add Medicines endpoint
     '''
     
-    authentication_classes = (authentication.CustomUserAuthentication, )
+    authentication_classes = (authentication.CustomAdminAuthentication, authentication.CustomPharmacyAuthentication)
     permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):
@@ -217,7 +228,7 @@ class Logout(views.APIView):
     '''
         Logout view can only be accessed by authenticated users
     '''
-    authentication_classes = (authentication.CustomUserAuthentication, )
+    authentication_classes = (authentication.CustomAdminAuthentication, )
     permission_classes = (permissions.IsAuthenticated, )
     
     def post(self, request):
