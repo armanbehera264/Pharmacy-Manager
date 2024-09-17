@@ -15,6 +15,8 @@
     const store = useStore();
     const toast = useToast();
 
+    store.dispatch('initializeStore');
+
     const visibility = ref(true);
 
     const updateVisibility = () => {

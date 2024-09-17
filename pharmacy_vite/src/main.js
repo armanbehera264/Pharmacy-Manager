@@ -26,6 +26,7 @@ import Row from 'primevue/row';
 import Drawer from 'primevue/drawer';
 import Textarea from 'primevue/textarea';
 import AutoComplete from 'primevue/autocomplete';
+import Carousel from 'primevue/carousel';
 
 // Importing Custom components
 import CustomPassword from './components/CustomPassword.vue';
@@ -64,6 +65,7 @@ app.component('Row', Row);
 app.component('Drawer', Drawer);
 app.component('Textarea', Textarea);
 app.component('AutoComplete', AutoComplete);
+app.component('Carousel', Carousel);
 
 app.component('CustomPassword', CustomPassword);
 

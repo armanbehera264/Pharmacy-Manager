@@ -5,7 +5,7 @@
 
     const store = useStore();
 
-    
+    store.dispatch('initializeStore');
     
 </script>
 

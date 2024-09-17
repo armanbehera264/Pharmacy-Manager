@@ -89,6 +89,48 @@ const routes = [
         component: EditMedicines
       }
     ]
+  },
+  {
+    path: '/frontdesk',
+    component: Admin,
+    children: [
+      {
+        path: '',
+        name: 'FrontDeskHomePage',
+        component: AdminHomePage
+      },
+      {
+        path: 'login',
+        name: 'FrontDeskLogin',
+        component: AdminLogin
+      },
+      {
+        path: 'signin',
+        name: 'FrontDeskSignin',
+        component: DoctorSignin
+      }
+    ]
+  },
+  {
+    path: '/pharmacy',
+    component: Admin,
+    children: [
+      {
+        path: '',
+        name: 'PharmacyHomePage',
+        component: AdminHomePage
+      },
+      {
+        path: 'login',
+        name: 'PharmacyLogin',
+        component: AdminLogin
+      },
+      {
+        path: 'signin',
+        name: 'PharmacySignin',
+        component: DoctorSignin
+      }
+    ]
   }
 ]
 

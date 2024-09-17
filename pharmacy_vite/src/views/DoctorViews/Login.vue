@@ -1,7 +1,7 @@
 <script setup>
     import { ref, onMounted, onBeforeUnmount } from 'vue';
     import '../../styles/styles.css';
-    import axios from 'axios';
+    import axios from '../../axios';
     import { useStore } from 'vuex';
     import { useToast } from 'primevue/usetoast';
     import router from '../../router' 
@@ -13,6 +13,8 @@
     const registration_number = ref('');
 
     const store = useStore();
+    store.dispatch('initializeStore');
+
     const toast = useToast();
 
     const visibility = ref(true);
@@ -89,9 +91,14 @@
                 // To set cookie
 
                 var username = `${data.first_name}${data.last_name}${data.registration_number}`;
-                store.dispatch('setIsRegistered', true);
-                store.dispatch('setUserType', 'doctor');
-                store.dispatch('setUsername', username);
+                store.dispatch('setLoginDetails', {
+                    'usertype': 'doctor',
+                    'isRegistered': true,
+                    'refreshToken': response.data.refresh,
+                    'accessToken': response.data.access,
+                    'firstName': data.first_name,
+                    'lastName': data.last_name
+                });
                 router.push('/doctor')
             })
             .catch( (error) => {
@@ -130,7 +137,7 @@
 
             <Button label="Submit" @click.prevent="submit"/>
             <br>
-            Need to make a new account?<router-link class="links" :to="{ name: 'DoctorSignin'}">Sign In</router-link>
+            Need to make a new account?<router-link class="underline" :to="{ name: 'DoctorSignin'}">Sign In</router-link>
         </div>
 
         <div class="vertical-divide" v-show="visibility"></div>
