@@ -56,10 +56,10 @@ class PrescribedMedicine(models.Model):
     ]
 
     medicine = models.ForeignKey(Medicines, verbose_name="Medicine Details", on_delete=models.CASCADE, related_name="prescribed_medicine")
-    frequency = models.PositiveIntegerField(validators=[MinValueValidator(1)], help_text="Number of times the medicine should be taken per day")
+    frequency = models.IntegerField(validators=[MinValueValidator(1)], help_text="Number of times the medicine should be taken per day")
     timings = models.CharField(max_length=11, choices=TIMING_CHOICES, verbose_name="Timing")
     customTiming = models.TimeField(blank=True, null=True)
-    duration_value = models.PositiveIntegerField(validators=[MinValueValidator(1)], help_text="Duration value based on the selected unit")
+    duration_value = models.IntegerField(validators=[MinValueValidator(1)], help_text="Duration value based on the selected unit")
     duration_unit = models.CharField(max_length=6, choices=DURATION_UNIT_CHOICES, verbose_name="Duration Unit")
 
     class Meta:
@@ -91,6 +91,9 @@ class PrescribedLabTest(models.Model):
     test_result = models.TextField(verbose_name="Test Result", blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending', verbose_name="Test Status") 
     attachment = models.FileField(upload_to='lab_tests/', verbose_name="Test Report", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.labtest} prescribed for {self.labtest.name} on {self.test_date}. Status: {self.status}."
 
 
 class Prescription(models.Model):

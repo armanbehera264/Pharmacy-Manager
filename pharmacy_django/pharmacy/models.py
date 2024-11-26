@@ -50,10 +50,10 @@ class Medicines(models.Model):
     name = models.CharField(max_length=255, verbose_name="Medicine Name", help_text="Name of the medicine", blank=False)
     stock = models.IntegerField(validators=[MinValueValidator(0)], verbose_name="Stock", help_text="Stock quantity of the medicine", blank=False)
     price = models.FloatField(validators=[MinValueValidator(0.0)], verbose_name="Price", help_text="Price of the medicine", blank=False)
-    ingredients = models.ManyToManyField(Ingredients, verbose_name="Ingredients", help_text="Ingredients in the medicine")
     description = models.TextField(verbose_name="Description", blank=True, null=True, help_text="Description of the medicine")
     manufacturer = models.CharField(max_length=255, verbose_name="Manufacturer", help_text="Manufacturer of the medicine", blank=True)
     expiration_date = models.DateField(verbose_name="Expiration Date", blank=False, help_text="Expiration date of the medicine")
+    ingredients = models.ManyToManyField(Ingredients, verbose_name="Ingredients", help_text="Ingredients in the medicine")
     categories = models.ManyToManyField(Categories, verbose_name="Categories", help_text="Categories of the medicine")
     sideEffects = models.ManyToManyField(SideEffects, verbose_name="Side Effects", help_text="Possible side effects of the medicine")
     allergies = models.ManyToManyField(Allergies, verbose_name="Allergies", help_text="Patients with these allergies should avoid.")
@@ -68,7 +68,10 @@ class Medicines(models.Model):
 
 class LabTests(models.Model):
     
-    name = models.CharField(max_length=255, verbose_name="Test Name")
+    name = models.CharField(max_length=255, verbose_name="Test Name", blank=False)
     description = models.TextField(verbose_name="Test Description", blank=True, null=True)
-    test_cost = models.FloatField(verbose_name="Test cost")
+    test_cost = models.FloatField(verbose_name="Test cost", blank=False)
+
+    def __str__(self):
+        return f"Test Name - {self.name}. Cost - {self.test_cost}"
     
