@@ -1,6 +1,6 @@
 from rest_framework import serializers, exceptions
 
-from .models import User, SpecializationAvailable
+from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     '''
@@ -18,7 +18,6 @@ class UserSerializer(serializers.ModelSerializer):
     # Had to override the default implementation because functionality was conflicting with password check
     def create(self, validated_data):
         user_data = validated_data
-        # doctor_data = validated_data.pop('user')
             
         user = User.objects.create_user(**user_data)
         
@@ -44,12 +43,3 @@ class UserSerializer(serializers.ModelSerializer):
         if value not in ['Male', 'Female', 'Other']:
             raise exceptions.ValidationError(detail="Gender of the user can only have three values: 'Male', 'Female' or 'Other'")
         return value
-    
-class SpecializationSerializer(serializers.ModelSerializer):
-    '''
-        Serializer for specialization serializer
-    '''
-    
-    class Meta:
-        model = SpecializationAvailable
-        fields = '__all__'

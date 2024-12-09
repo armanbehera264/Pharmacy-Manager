@@ -36,14 +36,14 @@
 <template>
     <!-- Landing Page Introduction -->
     <div class="text-center my-8">
-        <h1 class="text-4xl font-bold text-gray-800">Welcome to Our Healthcare Management System</h1>
+        <h1 class="text-4xl font-bold text-gray-800">Welcome to Healthcare Management System</h1>
         <p class="text-lg text-gray-500">Easily manage appointments, prescriptions, and more based on your role.</p>
     </div>  
 
     <div class="card">
         <Carousel :value="options" :numVisible="1" :numScroll="1" :responsiveOptions="responsiveOptions" circular :autoplayInterval="10000">
             <template #item="slotProps">
-                <div class="relative border border-surface-200 dark:border-surface-700 rounded m-2 p-4 bg-cover bg-center" :style="{ backgroundImage: `url(${asd})` }">
+                <div class="relative border border-surface-200 dark:border-surface-700 rounded m-2 p-4 bg-cover bg-center">
                     <div class="flex flex-column items-center justify-center h-full">
                         <div class="text-white text-2xl p-4 rounded">{{ slotProps.data.name }}</div>
                         <div class="mt-10 text-l">{{ slotProps.data.description }}</div>
@@ -60,7 +60,7 @@
 
     <!-- Footer Section with Useful Links -->
     <footer class="mt-16 bg-gray-100 p-4 text-center">
-        <p class="text-gray-600">© 2024 Healthcare Management System</p>
+        <p class="text-gray-600">© Healthcare Management System</p>
         <div class="flex justify-center space-x-4">
             <a href="/privacy-policy" class="text-indigo-400 underline">Privacy Policy</a>
             <a href="/terms-of-service" class="text-indigo-400 underline">Terms of Service</a>

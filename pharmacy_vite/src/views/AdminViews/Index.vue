@@ -29,9 +29,20 @@
             loggedIn: true,
             loggedOut: false,
             command: () => {
+                
                 router.push({ name: 'AdminHomePage' })
             }
         },
+        {
+            label: 'Home',  
+            icon: 'pi pi-home',
+            loggedIn: false,
+            loggedOut: true,
+            command: () => {
+                router.push({ name: 'Home' })
+            }
+        },
+        
         {
             label: 'Login',
             icon: 'pi pi-user',

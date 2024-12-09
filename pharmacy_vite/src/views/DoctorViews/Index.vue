@@ -10,6 +10,7 @@
     const drawerVisible = ref(false);
 
     store.dispatch('initializeStore');
+    console.log(store.getters.isRegistered);
 
     const items = ref([
         {
@@ -27,7 +28,16 @@
             loggedIn: true,
             loggedOut: false,
             command: () => {
-                router.push({ name: ' DoctorHomePage' })
+                router.push({ name: 'DoctorHomePage' })
+            }
+        },
+        {
+            label: 'Home',  
+            icon: 'pi pi-home',
+            loggedIn: false,
+            loggedOut: true,
+            command: () => {
+                router.push({ name: 'Home' })
             }
         },
         {

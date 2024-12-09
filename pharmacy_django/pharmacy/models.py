@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 
-
 class Ingredients(models.Model):
     '''
         Stores the ingredients information
@@ -53,10 +52,10 @@ class Medicines(models.Model):
     description = models.TextField(verbose_name="Description", blank=True, null=True, help_text="Description of the medicine")
     manufacturer = models.CharField(max_length=255, verbose_name="Manufacturer", help_text="Manufacturer of the medicine", blank=True)
     expiration_date = models.DateField(verbose_name="Expiration Date", blank=False, help_text="Expiration date of the medicine")
-    ingredients = models.ManyToManyField(Ingredients, verbose_name="Ingredients", help_text="Ingredients in the medicine")
-    categories = models.ManyToManyField(Categories, verbose_name="Categories", help_text="Categories of the medicine")
-    sideEffects = models.ManyToManyField(SideEffects, verbose_name="Side Effects", help_text="Possible side effects of the medicine")
-    allergies = models.ManyToManyField(Allergies, verbose_name="Allergies", help_text="Patients with these allergies should avoid.")
+    ingredients = models.ManyToManyField(Ingredients, verbose_name="Ingredients", help_text="Ingredients in the medicine", related_name="medicines")
+    categories = models.ManyToManyField(Categories, verbose_name="Categories", help_text="Categories of the medicine", related_name="medicines", blank=False)
+    sideEffects = models.ManyToManyField(SideEffects, verbose_name="Side Effects", help_text="Possible side effects of the medicine", related_name="medicines", blank=False)
+    allergies = models.ManyToManyField(Allergies, verbose_name="Allergies", help_text="Patients with these allergies should avoid.", related_name="medicines", blank=False)
 
     def __str__(self):
         return self.name

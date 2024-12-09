@@ -21,10 +21,11 @@ class SignIn(views.APIView):
         serializer = UserSerializer(data=request.data)
         
         if serializer.is_valid():
-            user = serializer.save()
             if user.is_verified == False or user.is_superuser == False:
                 return exceptions.AuthenticationFailed("Sign In user details must be of a admin.")
             
+            user = serializer.save()
+
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -72,7 +73,7 @@ class VerifyEmployees(views.APIView):
         
 
 class ViewEmployees(views.APIView):
-    authentication_classes = (authentication.CustomAdminAuthentication, )
+    authentication_classes = (authentication.CustomUserAuthentication, )
     permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):
@@ -107,7 +108,7 @@ class ViewMedicines(views.APIView):
         When it's a post request, this API allows to edit the medicine
     '''
     
-    authentication_classes = (authentication.CustomUserAuthentication, )
+    authentication_classes = (authentication.CustomDoctorAuthentication, authentication.CustomAdminAuthentication, authentication.CustomPharmacyAuthentication)
     permission_classes = (permissions.IsAuthenticated, )
     
     def get(self, request):

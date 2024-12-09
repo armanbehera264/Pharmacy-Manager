@@ -1,10 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
-from .models import DoctorUser, PatientUser
+from .models import DoctorUser, PatientUser, SpecializationAvailable
 from administrator.models import User
 from administrator.serializers import UserSerializer
-
 
 class DoctorSerializer(serializers.ModelSerializer):
     
@@ -44,4 +43,12 @@ class PatientSerializer(serializers.ModelSerializer):
         patient = PatientUser.objects.create(**validated_data)
         
         return patient
+
+class SpecializationSerializer(serializers.ModelSerializer):
+    '''
+        Serializer for specialization serializer
+    '''
     
+    class Meta:
+        model = SpecializationAvailable
+        fields = '__all__'

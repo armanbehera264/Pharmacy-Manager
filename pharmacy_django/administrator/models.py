@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import BaseUserManager
+
 class UserManager(BaseUserManager):
     '''
         Manager for base user
@@ -79,6 +80,7 @@ class UserManager(BaseUserManager):
         user.save()
         
         return user
+    
 class User(AbstractUser):
     
     '''
@@ -120,14 +122,3 @@ class User(AbstractUser):
         
     def __str__(self):
         return f"Name: {self.username}"
-    
-
-class SpecializationAvailable(models.Model):
-    '''
-        Stores all the specializations available
-    '''
-    
-    specialization = models.CharField(max_length = 128, blank=False)
-
-    def __str__(self):
-        return f"{self.specialization}"

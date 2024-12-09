@@ -4,12 +4,23 @@ from administrator.models import User
 from django.utils import timezone
 from pharmacy.models import Medicines, LabTests
 
+class SpecializationAvailable(models.Model):
+    '''
+        Stores all the specializations available
+    '''
+    
+    specialization = models.CharField(max_length = 128, blank=False)
+
+    def __str__(self):
+        return f"{self.specialization}"
+
+
 class DoctorUser(models.Model):
-    # specialization = models.ManyToManyField(SpecializationAvailable, blank=True, on_delete=models.PROTECT, related_name="doctors")
-    user = models.OneToOneField(User, verbose_name="Doctor User Details", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name="Doctor User Details", on_delete=models.PROTECT, related_name="doctor")
     consultation_fee = models.IntegerField(validators=[MinValueValidator(0)], blank=False, default=None)
     experience = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(150)], blank=True, default=None)
     registration_number = models.CharField(unique=True, blank=False, default=None, max_length=50)
+    specialization = models.ForeignKey(SpecializationAvailable, verbose_name="Specialization field for this doctor", on_delete=models.PROTECT, related_name="doctor")
     # availability = // To think of a way to represent availability
 
     def __str__(self):
@@ -18,8 +29,7 @@ class DoctorUser(models.Model):
 
 class PatientUser(models.Model):
     
-    user = models.OneToOneField(User, verbose_name="Patient User Details", on_delete=models.PROTECT)
-    occupation = models.CharField(max_length=50, blank=False)
+    user = models.OneToOneField(User, verbose_name="Patient User Details", on_delete=models.PROTECT, related_name="patient")
     medical_history = models.TextField(blank=True)
     
     
@@ -101,3 +111,5 @@ class Prescription(models.Model):
     appointment = models.OneToOneField(Appointment, verbose_name="Appointment Details", on_delete=models.CASCADE, related_name='prescription')
     medicines  = models.ManyToManyField(PrescribedMedicine, verbose_name="Medicines Prescribed", related_name='prescription', blank=True)
     labtests = models.ManyToManyField(PrescribedLabTest, verbose_name="Prescribed Lab Tests", related_name='prescription', blank=True)
+    additonal_information = models.TextField(verbose_name="Description", blank=True, null=True, help_text="Additional Information for the patient")
+    digital_signature = models.ImageField(upload_to='signatures/', verbose_name="Digital Signature", blank=False)
