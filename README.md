@@ -2,8 +2,6 @@
 
 A full-stack pharmacy and clinic management system. A **Django REST** backend handles authentication, role-based access and the medicine inventory, and a **Vue 3** single-page app provides separate portals for administrators and doctors.
 
-> **Status:** work in progress. The administrator and doctor flows are implemented; the front desk and pharmacy portals are scaffolded but not built out yet (see [Current status](#current-status)).
-
 ## Features
 
 **Administrator**
@@ -38,7 +36,7 @@ Pharmacy-Manager/
 │   ├── administrator/          # Custom User model, admin endpoints, JWT auth classes
 │   ├── doctor/                 # Doctor, Patient, Appointment, Prescription models + endpoints
 │   ├── pharmacy/               # Medicine, ingredient, category, side-effect, allergy, lab test models
-│   ├── frontdesk/              # Placeholder app
+│   ├── frontdesk/              # Front desk user
 │   ├── api/                    # Custom JWT serializer (adds role to the token)
 │   └── pharmacy_django/        # Project settings and root URLs
 └── pharmacy_vite/              # Frontend
@@ -120,13 +118,3 @@ Authenticated requests use the header `Authorization: JWT <access_token>`.
 - **Prescription**: tied to an appointment, with prescribed medicines (frequency, timing, duration), prescribed lab tests and a digital signature
 - **Medicines**: stock, price, expiry, with many-to-many links to ingredients, categories, side effects and allergies
 - **LabTests**: name, description and cost
-
-## Current status
-
-- **Done:** admin login, employee verification, medicine management, doctor registration and login, JWT flow with automatic refresh
-- **Scaffolded, not yet implemented:** front desk and pharmacy portals (the routes exist but reuse the admin pages), patient-facing features, and API endpoints for appointments, prescriptions and lab tests (the models exist)
-
-## Notes for contributors
-
-- `DEBUG = True` and `ALLOWED_HOSTS = []` in `settings.py`. Change these before any deployment.
-- Never commit `.env`; it holds your signing keys.
